@@ -2,7 +2,7 @@
 # Buduje aplikację "Gopeekgo" z rozszerzeniem Quick Look dla plików Markdown.
 #
 #   ./build.sh             buduje build/Gopeekgo.app
-#   ./build.sh install     buduje, kopiuje do ~/Applications i rejestruje rozszerzenie
+#   ./build.sh install     buduje, przenosi do ~/Applications i rejestruje rozszerzenie
 #   ./build.sh uninstall   wyrejestrowuje rozszerzenie i usuwa aplikację
 #
 # Wymaga Go z cgo i narzędzi Xcode (swiftc, codesign). Podpis jest lokalny (ad hoc); inną tożsamość
@@ -69,6 +69,8 @@ if [ "${1:-}" = install ]; then
 	uninstall
 	mkdir -p "$HOME/Applications"
 	cp -R "$APP" "$INSTALLED"
+	# Druga kopia paczki o tym samym identyfikatorze myli rejestr systemu, więc zostaje tylko zainstalowana.
+	rm -rf "$APP"
 	"$LSREGISTER" -f "$INSTALLED"
 	# Rejestracja bywa spóźniona względem lsregister, więc ponawiamy, aż system pokaże rozszerzenie.
 	registered=no
