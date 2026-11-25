@@ -10,4 +10,4 @@
 | 5 | porównanie z konkurencją na rynku (QLMarkdown, podgląd systemowy, inne): rozmiar, czas, pamięć, funkcje; tabela w `README.md` | pierwsze liczby w `docs/testing.md` |
 | 6 | czas od spacji do obrazu (nie tylko konwersja) | nie rozpoczęty |
 | 7 | rozpowszechnianie: binarka uniwersalna, Developer ID, notaryzacja | do decyzji |
-| 8 | CI: `go vet`, `go test`, budowanie aplikacji na macOS (ADR 0002) | gotowy (2026-11-25) |
+| 8 | CI: `go vet`, `go test`, budowanie aplikacji na macOS (ADR 0002) | plik gotowy; przepływ wyłączony w GitHubie (`gh workflow disable`) do nowego okresu rozliczeniowego, 2026-11-25 |
