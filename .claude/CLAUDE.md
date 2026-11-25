@@ -9,6 +9,8 @@ prawdziwych konsumentów wydanych wersji.
 Stan (2026-11-25): **działający prototyp**, przeniesiony z `gomdgo/tools/quicklook`. Zainstalowany lokalnie
 w `~/Applications/Gopeekgo.app`; sprawdzony na pliku z tabelą, listą zadań, blokiem uwagi i diagramem.
 Zacznij od `README.md`, potem `docs/adr/0001-scope-and-build.md`, `docs/roadmap.md`, `docs/testing.md`.
+Układ repozytorium i README trzymają schemat publicznych bibliotek rodziny (ADR 0002): w korzeniu tylko
+`LICENSE`, `NOTICE`, `README.md`, `go.mod`, `go.sum`, `.gitignore`; nowe pliki idą do katalogów.
 
 ## Układ
 
@@ -19,7 +21,7 @@ Zacznij od `README.md`, potem `docs/adr/0001-scope-and-build.md`, `docs/roadmap.
   i muszą się zgadzać z `bridge/main.go`.
 - `macos/`: `PreviewProvider.swift` (rozszerzenie, podgląd oparty na danych: oddaje systemowi gotowy HTML),
   `App.swift` (aplikacja-nośnik), pliki `Info.plist` i uprawnienia (rozszerzenie działa w piaskownicy).
-- `build.sh`: `go build -buildmode=c-archive`, `swiftc`, podpis ad hoc, instalacja i rejestracja
+- `macos/build.sh`: `go build -buildmode=c-archive`, `swiftc`, podpis ad hoc, instalacja i rejestracja
   (`lsregister`, `pluginkit`). Bez projektu Xcode. Rejestracja bywa spóźniona, dlatego skrypt ją ponawia.
 
 Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extension`. Obsługiwany typ pliku:
@@ -31,9 +33,9 @@ Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extens
   sprawdza publiczne API tak, jak widzi je odbiorca. Wersji `gomdgo` v0.1.0 nie używamy: jej znacznik został
   przesunięty po wydaniu i ma dwie różne treści (`../gomdgo/docs/adr/0017-version-0.1.1-and-immutable-tags.md`).
 - Żeby obejrzeć niewydaną zmianę biblioteki, użyj lokalnie `go.work` (`go work init . ../gomdgo`) i nie
-  commituj go; do zrobienia: przełącznik w `build.sh` (`docs/roadmap.md`).
+  commituj go; do zrobienia: przełącznik w `macos/build.sh` (`docs/roadmap.md`).
 - Kolorowanie składni przyjdzie z `../gohighlightgo` jako opcja kompilacji: plik `preview/highlight.go` ze
-  znacznikiem `//go:build highlight` i `preview/nohighlight.go` z pustą mapą; `build.sh` dostanie przełącznik.
+  znacznikiem `//go:build highlight` i `preview/nohighlight.go` z pustą mapą; `macos/build.sh` dostanie przełącznik.
   Po dołączeniu trzeba zmierzyć rozmiar rozszerzenia i czas w obu wariantach (kryterium H5 w
   `../gohighlightgo/docs/adr/0001-scope-and-acceptance.md`). Biblioteka jest dziś szkieletem.
 
@@ -47,7 +49,7 @@ Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extens
 - liczby są datowane i podpisane sposobem pomiaru; porównania podajemy jako przewagę `gopeekgo` w procentach,
   `(konkurent − gopeekgo) / konkurent × 100%`; wartość ujemną też zapisujemy; `README.md` uaktualniamy razem
   z `docs/testing.md`;
-- po każdej zmianie części macOS: `./build.sh install` i obejrzenie podglądu (`qlmanage -p plik.md`); w liście
+- po każdej zmianie części macOS: `macos/build.sh install` i obejrzenie podglądu (`qlmanage -p plik.md`); w liście
   `pluginkit -m -A -p com.apple.quicklook.preview` znak `+` oznacza rozszerzenie włączone, `-` wyłączone;
 - nazwy plików, pakietów i identyfikatorów po angielsku (także w Swifcie); komentarze i dokumentacja po polsku;
   `README.md` po angielsku; teksty widoczne dla użytkownika aplikacji po polsku (do decyzji: angielski

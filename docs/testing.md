@@ -4,7 +4,7 @@
 
 - `go test ./...`: pakiet `preview` (strona zawiera wynik Markdown i diagram; błąd diagramu nie przerywa
   podglądu; surowy HTML nie przechodzi do strony).
-- Część macOS sprawdzamy ręcznie: `./build.sh install`, potem `qlmanage -p plik.md` albo spacja w Finderze.
+- Część macOS sprawdzamy ręcznie: `macos/build.sh install`, potem `qlmanage -p plik.md` albo spacja w Finderze.
   Stopka strony („gopeekgo · gomdgo + gomermaidgo · rozmiar · czas”) potwierdza, że podgląd pochodzi z tego
   rozszerzenia.
 
@@ -45,3 +45,22 @@ Zastrzeżenia:
 - QLMarkdown koloruje bloki kodu, my nie;
 - to pomiar konwersji programem wiersza poleceń, nie czasu od spacji do obrazu; tego nie mierzono;
 - po przeniesieniu plik wykonywalny rozszerzenia ma 6 676 112 B (budowany wtedy ze starej treści `gomdgo` v0.1.0; od tego samego dnia zależność to v0.1.1).
+
+## Próba funkcji 2026-11-25: gopeekgo wobec QLMarkdown 1.5.7
+
+Sposób: jeden plik z nagłówkiem YAML, tabelą, listą zadań, przekreśleniem, adresem `www.`, przypisem, uwagą
+`> [!NOTE]`, diagramem `mermaid`, `<script>` i `<b>`, odnośnikiem `javascript:`, blokiem `go`, wzorami `$…$`
+i `$$…$$`, skrótem `:smile:` i obrazem o ścieżce względnej. QLMarkdown: `qlmarkdown_cli` z ustawieniami
+zainstalowanej aplikacji (`--show-settings`); gopeekgo: `preview.Page` z bieżącego kodu. Wynik to wiersze
+o funkcjach w tabeli `README.md`.
+
+- QLMarkdown, przy tych ustawieniach: wczytuje Mermaid 12.0.0 i MathJax 4.1.3 z `cdn.jsdelivr.net`
+  (strona ma CSP dopuszczające tylko ten adres); uwag GitHub nie rozpoznaje, dopóki nie włączy się `--alert`;
+  `<script>` usuwa, `<b>` przepuszcza, odnośnik `javascript:` zostawia; koloruje kod, zamienia `:smile:`
+  na znak, nagłówek YAML pokazuje jako tabelę, istniejący obraz wstawia jako `data:`. Paczka jest podpisana
+  Developer ID i notaryzowana, plik rozszerzenia jest uniwersalny; licencja GPL-3.0.
+- gopeekgo: strona bez `<script>` i bez adresów zewnętrznych; diagram jako SVG; surowy HTML jako tekst;
+  odnośnik `javascript:` usunięty (zostaje tekst).
+- Znalezisko do zapisania dla `gomdgo`: nagłówek YAML (`---`, `title: front`, `---`) wychodzi jako linia
+  pozioma i nagłówek `<h2>`. To zgodne z CommonMark, ale nagłówki YAML są częste w notatkach i dokumentacji;
+  do decyzji, czy biblioteka ma je pomijać albo oddawać osobno (opcja), czy robi to strona podglądu.

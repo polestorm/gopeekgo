@@ -1,15 +1,15 @@
 #!/bin/sh
 # Buduje aplikację "Gopeekgo" z rozszerzeniem Quick Look dla plików Markdown.
 #
-#   ./build.sh             buduje build/Gopeekgo.app
-#   ./build.sh install     buduje, przenosi do ~/Applications i rejestruje rozszerzenie
-#   ./build.sh uninstall   wyrejestrowuje rozszerzenie i usuwa aplikację
+#   macos/build.sh             buduje build/Gopeekgo.app
+#   macos/build.sh install     buduje, przenosi do ~/Applications i rejestruje rozszerzenie
+#   macos/build.sh uninstall   wyrejestrowuje rozszerzenie i usuwa aplikację
 #
 # Wymaga Go z cgo i narzędzi Xcode (swiftc, codesign). Podpis jest lokalny (ad hoc); inną tożsamość
 # podaje zmienna SIGN_IDENTITY.
 set -eu
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 APP_NAME=Gopeekgo
 EXT_NAME=GopeekgoExtension
