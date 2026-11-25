@@ -27,15 +27,9 @@ Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extens
 
 ## Zależności
 
-- `go.mod` wskazuje wydane wersje: `gomdgo` v0.1.0 i `gomermaidgo` v0.1.0, bez `replace`. To celowe: projekt
-  sprawdza publiczne API tak, jak widzi je odbiorca.
-- **Do naprawy (stwierdzone 2026-11-25):** tag `v0.1.0` w `gomdgo` został przesunięty przy przepisaniu historii
-  (2026-11-24). Pamięć podręczna modułów na komputerze właściciela trzyma starą treść (suma
-  `h1:cpwoQcxV…`, `go 1.26.0`), a GitHub podaje nową (`h1:PCs0HC1u…`, `go 1.22`). `go.sum` tutaj i w
-  `../gopressgo` ma starą sumę: lokalnie działa, ale na czystej pamięci podręcznej pobranie skończy się błędem
-  sumy kontrolnej. Dyrektywa `go 1.26.0` w `go.mod` też pochodzi ze starej treści. Naprawa wymaga decyzji
-  właściciela (odświeżenie wpisu w pamięci podręcznej i `go mod tidy` w obu projektach albo nowe wydanie
-  `gomdgo` v0.1.1); nie rób tego bez pytania.
+- `go.mod` wskazuje wydane wersje: `gomdgo` v0.1.1 i `gomermaidgo` v0.1.0, bez `replace`. To celowe: projekt
+  sprawdza publiczne API tak, jak widzi je odbiorca. Wersji `gomdgo` v0.1.0 nie używamy: jej znacznik został
+  przesunięty po wydaniu i ma dwie różne treści (`../gomdgo/docs/adr/0017-version-0.1.1-and-immutable-tags.md`).
 - Żeby obejrzeć niewydaną zmianę biblioteki, użyj lokalnie `go.work` (`go work init . ../gomdgo`) i nie
   commituj go; do zrobienia: przełącznik w `build.sh` (`docs/roadmap.md`).
 - Kolorowanie składni przyjdzie z `../gohighlightgo` jako opcja kompilacji: plik `preview/highlight.go` ze

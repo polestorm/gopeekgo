@@ -44,4 +44,4 @@ Zastrzeżenia:
   rysuje JavaScript w oknie podglądu, więc jego czas przy diagramach jest w rzeczywistości dłuższy;
 - QLMarkdown koloruje bloki kodu, my nie;
 - to pomiar konwersji programem wiersza poleceń, nie czasu od spacji do obrazu; tego nie mierzono;
-- po przeniesieniu plik wykonywalny rozszerzenia ma 6 676 112 B (budowany z `gomdgo` v0.1.0).
+- po przeniesieniu plik wykonywalny rozszerzenia ma 6 676 112 B (budowany wtedy ze starej treści `gomdgo` v0.1.0; od tego samego dnia zależność to v0.1.1).
