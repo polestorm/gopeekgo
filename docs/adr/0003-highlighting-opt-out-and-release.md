@@ -32,3 +32,11 @@ library is being built in a separate repository.
 gohighlightgo v0.1.2 is released and public, so point 4 is met: the dependency is in `go.mod` and the adapter
 from `gohighlightgo/docs/adapters/gopeekgo.patch` is applied (ADR 0004). The switch of point 2 is
 `TAGS=nohighlight macos/build.sh`. Point 3 still holds: the version tag is the owner's decision.
+
+## Update 2026-11-26: release v0.1.0 before the 24-hour fuzzing of gohighlightgo
+
+Owner's decision: gopeekgo v0.1.0 is released and the repository made public without waiting for the 24-hour
+fuzzing of gohighlightgo (`FuzzHTML`, `FuzzDefinition`), which started on 2026-11-26. gohighlightgo itself
+released v0.1.0–v0.1.2 before that run (its ADR 0007). The result of the run will be added to
+`docs/testing.md`; a fix it calls for comes as a new gohighlightgo version and a gopeekgo release that depends
+on it. Point 3 is replaced by this update.

@@ -6,8 +6,8 @@ więc podgląd powstaje w procesie rozszerzenia: bez JavaScriptu, bez uruchamian
 Cel właściciela: testować nasze biblioteki na każdym pliku, jaki ma pod ręką, i mieć jednego z pierwszych
 prawdziwych konsumentów wydanych wersji.
 
-Stan (2026-11-26): **wersja 0.1.0 przygotowana do upublicznienia** (ADR 0004), bez znacznika i jeszcze
-prywatna. Kolorowanie z `gohighlightgo` v0.1.2 włączone; polecenie `cmd/gopeekgo-render` daje tę samą stronę
+Stan (2026-11-26): **wydana wersja 0.1.0, repozytorium publiczne** (ADR 0004; ADR 0003, uzupełnienie: przed
+24 h fuzzingu `gohighlightgo`, wynik do dopisania). Kolorowanie z `gohighlightgo` v0.1.2 włączone; polecenie `cmd/gopeekgo-render` daje tę samą stronę
 co rozszerzenie. Zainstalowany lokalnie w `~/Applications/GoPeekGo.app`.
 Zacznij od `README.md`, potem `docs/adr/0001-scope-and-build.md`, `docs/roadmap.md`, `docs/testing.md`.
 Układ repozytorium i README trzymają schemat publicznych bibliotek rodziny (ADR 0002): w korzeniu tylko
@@ -49,7 +49,7 @@ inne zostaje małymi literami. Identyfikatory paczek: `com.polestorm.gopeekgo` i
   z `//go:build !nohighlight`, `preview/nohighlight.go` z `//go:build nohighlight`. Testy uruchamiaj w obu
   wariantach (`go test ./...` i `go test -tags nohighlight ./...`). H5 zmierzone 2026-11-26 (`docs/testing.md`);
   po każdym nowym wydaniu `gohighlightgo` (np. kolejne języki): `go get …@vX`, testy, `tools/bench` w obu wariantach.
-- **Znacznik wersji i zmiana widoczności repozytorium tylko na decyzję właściciela** (ADR 0003, punkt 3; ADR 0004).
+- **Kolejne znaczniki wersji tylko na decyzję właściciela**; znaczników nie przesuwamy (jak ADR 0017 w `gomdgo`).
 
 ## Jak pracujemy
 
@@ -71,7 +71,7 @@ inne zostaje małymi literami. Identyfikatory paczek: `com.polestorm.gopeekgo` i
 - nazwy plików, pakietów i identyfikatorów po angielsku (także w Swifcie); komentarze i dokumentacja też po
   angielsku (ADR 0005, odstępstwo od reguły rodziny); teksty widoczne dla użytkownika aplikacji też po angielsku (decyzja właściciela z 2026-11-26);
 - każda decyzja = plik w `docs/adr/`; licencja: Apache 2.0;
-- repozytorium `github.com/polestorm/gopeekgo` (do upublicznienia, ADR 0004); `gomdgo`, `gomermaidgo`
+- repozytorium `github.com/polestorm/gopeekgo` (publiczne od 2026-11-26); `gomdgo`, `gomermaidgo`
   i `gohighlightgo` są publiczne;
   commit i push tylko na prośbę właściciela;
 - opisy commitów po angielsku; przed commitem muszą przechodzić `go vet ./...` i `go test ./...`;
