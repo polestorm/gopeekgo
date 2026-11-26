@@ -1,128 +1,110 @@
 # gopeekgo
 
 Quick Look preview of Markdown files on macOS, rendered in pure Go: select a `.md` file in Finder and press
-Space. The page is built by [gomdgo](https://github.com/polestorm/gomdgo) (CommonMark + GFM → HTML) and
-[gomermaidgo](https://github.com/polestorm/gomermaidgo) (` ```mermaid ` blocks → SVG), linked into the
-extension as a Go archive: no JavaScript, no helper process, no network.
+Space. [gomdgo](https://github.com/polestorm/gomdgo) turns CommonMark and GFM into HTML,
+[gomermaidgo](https://github.com/polestorm/gomermaidgo) draws ` ```mermaid ` blocks as SVG and
+[gohighlightgo](https://github.com/polestorm/gohighlightgo) colours the code, all inside the extension: no
+JavaScript, no helper process, no network.
 
 ```sh
-macos/build.sh install   # build, copy to ~/Applications/Gopeekgo.app, register the extension
-qlmanage -p README.md    # or Space in Finder
+macos/build.sh install                                                # the Quick Look extension
+go install github.com/polestorm/gopeekgo/cmd/gopeekgo-render@latest   # the same page from the command line
 ```
 
 ## Why gopeekgo
 
-Compared with [QLMarkdown](https://github.com/sbarex/QLMarkdown), a popular free and open-source Markdown preview for
-macOS (details in [Comparison](#comparison)):
+Compared with [QLMarkdown](https://github.com/sbarex/QLMarkdown), a popular free and open-source Markdown
+preview for macOS (details in [Comparison](#comparison)):
 
-- **Diagrams without a browser engine**: Mermaid blocks are drawn as SVG while the page is built; no script
-  runs in the preview and nothing is fetched from the network.
-- **Faster**: 80–93% less conversion time on the three test documents.
-- **Smaller**: a 6.6 MB application instead of 64 MB, and half the memory on a 1.3 MB document.
+- **Fast**: 80–99% less time than QLMarkdown's converter on the five test inputs; 31 ms instead of 2.2 s for
+  1.3 MB of code.
+- **Small**: a 7.3 MB application instead of 64 MB, and less memory on every input.
+- **No scripts in the preview**: diagrams are drawn as SVG and code is highlighted while the page is built, so
+  the page has no `<script>` and loads no library from the network.
 - **Safe by default**: raw HTML from the document is shown as text and `javascript:` links are removed.
 - **Shows its own errors**: a diagram that cannot be drawn is replaced by the message, its line number and the
   source of the block; the rest of the page is still shown.
 
-Where it is weaker: no syntax highlighting yet (planned), no math, emoji shortcodes, front matter, relative
-images or settings. It is built from source for the architecture of the machine and signed ad hoc, and its
-extension executable is 23% larger, because it carries the Go runtime and everything else.
+Where it is weaker: no math, emoji shortcodes, YAML front matter, images with relative paths or settings, and
+fewer Mermaid diagram types. It is built from source for the architecture of the machine and signed ad hoc, and
+its extension executable is 32% larger, because it carries the Go runtime, the fonts for measuring diagram text
+and everything else.
 
 ## Contents
 
-- [Why gopeekgo](#why-gopeekgo) · [Comparison](#comparison) · [Status](#status) · [Install](#install) ·
-  [Documentation](#documentation) · [How the comparison was measured](#how-the-comparison-was-measured) ·
+- [Why gopeekgo](#why-gopeekgo) · [Comparison](#comparison) · [Documentation](#documentation) ·
   [License](#license)
+- [Usage](docs/usage.md): installing, turning another Markdown preview off, the command line, building without
+  highlighting
+- [How the comparison was measured](docs/benchmark.md): the input files, the two commands behind the table and
+  what the numbers do not show
 
 ## Comparison
 
-QLMarkdown converts the document inside its extension and leaves diagrams and math to JavaScript libraries
-(Mermaid, MathJax) running in the preview. It does more than gopeekgo and has many settings; the table shows
-both the numbers and the features.
-
-| | gopeekgo | QLMarkdown 1.5.7 | gopeekgo advantage[^adv] |
+| | gopeekgo 0.1.0 | QLMarkdown 1.5.7 | gopeekgo advantage[^adv] |
 |---|:---:|:---:|:---:|
-| Application on disk[^size] | 6.6 MB 🥇 | 64.0 MB | 90% |
-| Extension executable, arm64 | 6.68 MB | 5.43 MB 🥇 | −23% |
-| Conversion, 24 KB document[^bench] | 4.2 ms 🥇 | 21.5 ms | 80% |
-| Conversion, 0.2 KB with a diagram | 2.9 ms 🥇 | 16.5 ms | 82% |
-| Conversion, 1.3 MB document | 14.9 ms 🥇 | 199.8 ms | 93% |
-| Peak memory, 0.2 KB with a diagram | 7.1 MB 🥇 | 18.2 MB | 61% |
-| Peak memory, 1.3 MB document | 31.8 MB 🥇 | 60.3 MB | 47% |
-| Mermaid diagrams[^probe] | SVG drawn during conversion 🥇 | Mermaid.js in the preview | |
-| Diagram types | 24 of Mermaid's 33 | all of Mermaid 12.0 🥇 | |
-| Network, JavaScript in the preview[^net] | none 🥇 | Mermaid and MathJax from a CDN, or embedded | |
-| `<script>` in the source | written as text | removed | |
-| Other raw HTML (`<b>`) | written as text | rendered | |
-| `javascript:` link | removed 🥇 | kept in the page | |
-| Tables, task lists, strikethrough, autolinks | yes | yes | |
-| Footnotes, heading identifiers | yes | yes | |
-| GitHub alerts (`> [!NOTE]`) | yes | yes, a setting | |
-| Syntax highlighting | not yet | yes 🥇 | |
-| Math | no | yes, MathJax 🥇 | |
-| YAML front matter | no (read as Markdown) | a table 🥇 | |
+| Application on disk[^size] | 7.3 MB 🥇 | 63.9 MB | 89% |
+| Extension executable, arm64 | 7.2 MB | 5.4 MB 🥇 | −32% |
+| Time, 24 kB document[^bench] | 3.3 ms 🥇 | 21.4 ms | 84% |
+| Time, 0.2 kB with a diagram | 3.3 ms 🥇 | 16.7 ms | 80% |
+| Time, 1.3 MB document | 15.7 ms 🥇 | 213.6 ms | 93% |
+| Time, 15 kB of code in 19 languages | 3.5 ms 🥇 | 47.9 ms | 93% |
+| Time, 1.3 MB of code | 31 ms 🥇 | 2,222 ms | 99% |
+| Peak memory, 24 kB document | 8.1 MB 🥇 | 21.7 MB | 63% |
+| Peak memory, 1.3 MB document | 32.8 MB 🥇 | 59.5 MB | 45% |
+| Peak memory, 1.3 MB of code | 42.8 MB 🥇 | 57.2 MB | 25% |
+| Tables, task lists, strikethrough, `www.` links, footnotes, heading identifiers[^feat] | yes | yes | |
+| Syntax highlighting | yes | yes | |
+| GitHub alerts (`> [!NOTE]`) | yes | a setting, off in the settings measured | |
+| Mermaid diagrams | drawn as SVG while the page is built | drawn by Mermaid.js in the preview | |
+| Mermaid diagram types[^types] | 24 of 33 | all of Mermaid 12.0 🥇 | |
+| Scripts in the page | none 🥇 | Mermaid.js and MathJax, from `cdn.jsdelivr.net` or embedded (a setting) | |
+| Math | no | yes 🥇 | |
+| YAML front matter | read as Markdown | shown as metadata 🥇 | |
 | Emoji shortcodes (`:smile:`) | no | yes 🥇 | |
-| Images with relative paths | no | yes, embedded 🥇 | |
+| Image with a relative path[^img] | not shown | embedded in the page 🥇 | |
+| `<script>` in the source | shown as text | shown as text | |
+| Other raw HTML (`<b>`) | shown as text | rendered | |
+| `javascript:` link | removed 🥇 | kept | |
 | Settings | none | many, in its application 🥇 | |
-| Light and dark appearance | yes | yes | |
 | Architectures | the building machine's | universal (arm64 + x86_64) 🥇 | |
-| Distribution | build from source, signed ad hoc | notarized, Developer ID 🥇 | |
-| License | Apache 2.0 | GPL-3.0 | |
-| GitHub popularity[^pop] | new | 3,795 stars, 124 forks | |
+| Distribution | built from source, signed ad hoc | notarized, Developer ID 🥇 | |
+| License | Apache 2.0 | GPL 3.0 | |
+| GitHub popularity[^pop] | new | 3,795 stars, 124 forks 🥇 | |
+
+To repeat the comparison, see [docs/benchmark.md](docs/benchmark.md). If you maintain QLMarkdown and get
+different results, please open an issue.
 
 [^adv]: `(QLMarkdown − gopeekgo) / QLMarkdown × 100%`; a negative value means gopeekgo is worse. 🥇 marks the
-    better value in a row.
-[^size]: `du` of the installed application; the executable is the arm64 slice of QLMarkdown's universal file
-    (11.4 MB in total). QLMarkdown keeps highlighting and Mermaid outside it (`libwrapper_highlight.dylib`
-    6.9 MB, `mermaid.min.js.gz` 1.6 MB); gopeekgo has everything in its executable.
-[^bench]: Whole process of each project's command-line converter, median of 15 runs, memory from
-    `/usr/bin/time -l`; measured 2026-11-25 on one Apple-silicon laptop. gopeekgo's time includes drawing the
-    diagram; QLMarkdown's does not, because Mermaid draws it later in the preview.
-[^probe]: The feature rows come from converting one small probe file with both programs on 2026-11-25:
-    QLMarkdown through `qlmarkdown_cli` with the settings of the installed application, gopeekgo through
-    `preview.Page`. "No" means the feature did not appear in the output.
-[^net]: With the settings used, QLMarkdown loads Mermaid 12.0.0 and MathJax 4.1.3 from `cdn.jsdelivr.net`;
-    it can also embed them.
-[^pop]: Stars and forks on 2026-11-25. The last release of QLMarkdown is from 2026-10-02.
-
-## Status
-
-Working prototype (2026-11-25). It depends on the released versions of the libraries
-(gomdgo v0.1.1, gomermaidgo v0.1.0), so it sees them as any other consumer does; a rendering error found here
-is fixed in the library, not worked around. Requires macOS 13 or newer, Go 1.22 or newer with cgo, and the
-Xcode command line tools.
-
-## Install
-
-```sh
-macos/build.sh install     # build, copy to ~/Applications/Gopeekgo.app, register the extension
-macos/build.sh uninstall   # unregister and remove
-go test ./...              # tests of the Go part (run anywhere)
-```
-
-macOS uses one preview extension per file type. If another Markdown preview is installed, turn it off in
-System Settings (General → Login Items & Extensions → Quick Look), or for example:
-
-```sh
-pluginkit -e ignore -i org.sbarex.QLMarkdown.QLExtension   # off
-pluginkit -e use    -i org.sbarex.QLMarkdown.QLExtension   # back on
-qlmanage -r
-```
+    better value where one is better whatever the reader prefers; rows where the two are equal or where it is a
+    matter of taste have none.
+[^size]: Sum of the file sizes in the installed application. The executable row compares the arm64 slice of
+    QLMarkdown's universal file (11.4 MB in total); QLMarkdown keeps highlighting and Mermaid outside it
+    (`libwrapper_highlight.dylib` 6.9 MB, `mermaid.min.js.gz` 1.6 MB), gopeekgo has everything in its executable.
+[^bench]: Whole process of each project's command-line converter (`gopeekgo-render`, which writes exactly the
+    page the extension returns, and `qlmarkdown_cli` from the QLMarkdown bundle) on the frozen files in
+    [`testdata/bench/`](testdata/bench/); median of 15 runs, peak memory from `getrusage`. `go run ./tools/bench`,
+    2026-11-26, Apple M4. gopeekgo's time includes drawing the diagram; QLMarkdown's does not, because
+    Mermaid.js draws it later in the preview. [More](docs/benchmark.md)
+[^feat]: The feature rows come from `go run ./tools/features`: one small file per feature in
+    [`testdata/features/`](testdata/features/), converted by both programs, and a fixed rule that reads the page.
+    QLMarkdown runs with the settings of its installed application, recorded with the results in
+    [`docs/testing.md`](docs/testing.md).
+[^types]: Mermaid 12.2 recognises 33 diagram types; gomermaidgo draws 24 of them
+    ([its comparison](https://github.com/polestorm/gomermaidgo#comparison)). QLMarkdown runs Mermaid 12.0 itself.
+[^img]: gopeekgo leaves the address in the page, and a Quick Look preview built from data cannot load it.
+[^pop]: Stars and forks on 2026-11-25. The last release of QLMarkdown is from 2026-10-02. Architectures,
+    distribution and license were checked with `lipo`, `spctl` and the GitHub API on the same day.
 
 ## Documentation
 
-In Polish: [`docs/testing.md`](docs/testing.md) (tests, measurements, comparison with QLMarkdown),
-[`docs/adr/`](docs/adr/) (decisions), [`docs/roadmap.md`](docs/roadmap.md).
-
-## How the comparison was measured
-
-Both projects were run only as programs, on the same files and the same machine; the code of other previews and
-Markdown parsers is not read. The conversion times come from the command-line converters
-(`gomdgo-mermaid -standalone -alerts -footnotes -heading-ids` and `qlmarkdown_cli` from the QLMarkdown bundle),
-not from the extensions, so they do not include the time from pressing Space to seeing the page; that is not
-measured yet. The 24 KB document is `docs/testing.md` of gomdgo, the 1.3 MB document is 40 copies of it with
-gomdgo's `README.md`. gopeekgo's numbers were measured on the prototype before it moved to this repository,
-with the gomdgo code of that day; the method and caveats are in [`docs/testing.md`](docs/testing.md).
+- [`docs/usage.md`](docs/usage.md): installing and using the preview and the command.
+- [`docs/benchmark.md`](docs/benchmark.md): how the comparison is measured, with the input files.
+- In Polish: [`docs/testing.md`](docs/testing.md) (tests and the results of every measurement),
+  [`docs/adr/`](docs/adr/) (decisions), [`docs/roadmap.md`](docs/roadmap.md).
 
 ## License
 
-Apache License 2.0, see `LICENSE` and `NOTICE`.
+Apache License 2.0, see `LICENSE` and `NOTICE`. The built application and command include the Arimo and Noto
+Emoji typefaces through gomermaidgo, under the SIL Open Font License 1.1; `NOTICE` says where their license
+texts are, and `macos/build.sh` puts them into the application.

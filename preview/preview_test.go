@@ -15,7 +15,7 @@ func TestPageRendersMarkdownAndDiagram(t *testing.T) {
 		"<table>",
 		"<figure class=\"diagram\">",
 		"<svg",
-		"<footer>gopeekgo · gomdgo + gomermaidgo",
+		"<footer>gopeekgo " + Version + " · " + libraries + " · ",
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("brak %q w wyniku", want)

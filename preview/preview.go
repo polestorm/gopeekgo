@@ -1,10 +1,14 @@
-// Package preview składa stronę HTML podglądu pliku Markdown: gomdgo zamienia dokument na HTML, a bloki
-// kodu o języku "mermaid" rysuje gomermaidgo. Pakiet nie zależy od cgo ani od macOS, więc da się go
-// testować wszędzie; rozszerzenie Quick Look woła go przez ../bridge.
+// Package preview builds the HTML page of the gopeekgo Quick Look preview for a Markdown file. gomdgo
+// converts the document to HTML, gomermaidgo draws the code blocks marked "mermaid" as SVG, and
+// gohighlightgo colours the other code blocks (unless the program is built with the nohighlight tag).
 //
-// Podgląd służy do oglądania dowolnych plików, także niepoprawnych, dlatego Page nie zwraca błędu:
-// błąd diagramu trafia na stronę w miejscu diagramu, a panika biblioteki zamienia się w stronę
-// z komunikatem (i jest sygnałem, że znaleźliśmy błąd do zgłoszenia).
+// The package needs neither cgo nor macOS, so the page can be built and tested anywhere; the Quick Look
+// extension calls it through the bridge command, and cmd/gopeekgo-render writes the same page from the
+// command line.
+//
+// A preview is used to look at any file, including broken ones, so Page never fails: a diagram that cannot
+// be drawn is replaced by its error message and source, and a panic in a library becomes a page with the
+// message and the stack trace.
 package preview
 
 import (
@@ -22,7 +26,9 @@ import (
 //go:embed style.css
 var style string
 
-// Page zwraca kompletny dokument HTML z podglądem źródła src. Tytuł trafia do <title>.
+// Page returns a complete HTML document that previews the Markdown source src, with title in <title>. The
+// page has no scripts, its stylesheet and diagrams are inline, and raw HTML from the source is shown as text;
+// only images the document itself links to by address are left for the viewer to load.
 func Page(src []byte, title string) (out []byte) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -35,6 +41,7 @@ func Page(src []byte, title string) (out []byte) {
 		HeadingIDs: true,
 		CodeBlocks: map[string]gomdgo.CodeBlockFunc{"mermaid": diagram},
 	}
+	addHighlighting(cfg.CodeBlocks)
 	start := time.Now()
 	body, err := gomdgo.New(cfg).Render(src)
 	elapsed := time.Since(start)
@@ -46,8 +53,8 @@ func Page(src []byte, title string) (out []byte) {
 	out = append(out, "<main>\n"...)
 	out = append(out, body...)
 	out = append(out, "</main>\n"...)
-	out = fmt.Appendf(out, "<footer>gopeekgo · gomdgo + gomermaidgo · %d B → %d B · %s</footer>\n",
-		len(src), len(body), elapsed.Round(10*time.Microsecond))
+	out = fmt.Appendf(out, "<footer>gopeekgo %s · %s · %d B → %d B · %s</footer>\n",
+		Version, libraries, len(src), len(body), elapsed.Round(10*time.Microsecond))
 	return append(out, "</body>\n</html>\n"...)
 }
 
@@ -78,7 +85,7 @@ func diagramError(b gomdgo.CodeBlock, message string) []byte {
 
 func head(title string) []byte {
 	return []byte("<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>" +
-		html.EscapeString(title) + "</title>\n<style>" + markdown.CSS + style + "</style>\n</head>\n<body>\n")
+		html.EscapeString(title) + "</title>\n<style>" + markdown.CSS + style + highlightCSS + "</style>\n</head>\n<body>\n")
 }
 
 func failure(title, message, detail string) []byte {

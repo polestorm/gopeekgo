@@ -7,7 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let text = NSTextField(wrappingLabelWithString:
-            "Podgląd Markdown (gomdgo + gomermaidgo) jest zainstalowany.\n\n" +
+            "Podgląd Markdown (gomdgo + gomermaidgo + gohighlightgo) jest zainstalowany.\n\n" +
             "Zaznacz plik .md w Finderze i naciśnij spację. Rozszerzenie włączysz i wyłączysz " +
             "w Ustawieniach systemowych: Ogólne → Rzeczy otwierane przy logowaniu i rozszerzenia → Quick Look.")
         text.frame = NSRect(x: 24, y: 24, width: 432, height: 132)

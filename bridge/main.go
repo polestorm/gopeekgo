@@ -1,7 +1,7 @@
-// Polecenie bridge to cienka warstwa C nad pakietem preview. Budujemy je jako archiwum
-// (go build -buildmode=c-archive) i łączymy z rozszerzeniem Quick Look napisanym w Swifcie,
-// więc podgląd powstaje w procesie rozszerzenia, bez uruchamiania innych programów.
-// Deklaracje dla Swifta są w ../macos/bridge.h i muszą zgadzać się z tym plikiem.
+// Command bridge is a thin C layer over package preview. It is built as an archive
+// (go build -buildmode=c-archive) and linked into the Quick Look extension written in Swift, so the
+// preview is made inside the extension process, without starting other programs. The declarations
+// for Swift are in macos/bridge.h and must match this file. See macos/build.sh.
 package main
 
 /*
@@ -15,8 +15,8 @@ import (
 	"github.com/polestorm/gopeekgo/preview"
 )
 
-// GopeekgoPreview zwraca stronę HTML dla źródła Markdown (n bajtów pod src). Długość wyniku trafia
-// do outLen, a pamięć wyniku zwalnia wywołujący przez GopeekgoFree.
+// GopeekgoPreview returns the HTML page for the Markdown source of n bytes at src. The length of the
+// result is stored in outLen; the caller frees the result with GopeekgoFree.
 //
 //export GopeekgoPreview
 func GopeekgoPreview(src *C.char, n C.int, title *C.char, outLen *C.int) *C.char {
@@ -25,6 +25,8 @@ func GopeekgoPreview(src *C.char, n C.int, title *C.char, outLen *C.int) *C.char
 	return (*C.char)(C.CBytes(page))
 }
 
+// GopeekgoFree frees a result of GopeekgoPreview.
+//
 //export GopeekgoFree
 func GopeekgoFree(p *C.char) {
 	C.free(unsafe.Pointer(p))

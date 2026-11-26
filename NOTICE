@@ -1,4 +1,15 @@
 gopeekgo
-Copyright 2026 Michał Głębowski
+Copyright 2026 Michał Głębowski (https://github.com/polestorm)
 
 This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The built application and the gopeekgo-render command include the libraries
+gomdgo, gomermaidgo and gohighlightgo by the same author, also under the
+Apache License, Version 2.0.
+
+Through gomermaidgo they also include the Arimo typeface, copyright The Arimo
+Project Authors, and a static cut of the Noto Emoji typeface, copyright Google
+LLC, both distributed under the SIL Open Font License 1.1. The license texts
+are fonts/OFL-Arimo.txt and fonts/OFL-NotoEmoji.txt in the gomermaidgo module;
+macos/build.sh copies them, with LICENSE and this file, into
+Gopeekgo.app/Contents/Resources.

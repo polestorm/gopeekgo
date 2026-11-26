@@ -5,6 +5,10 @@
 #   macos/build.sh install     buduje, przenosi do ~/Applications i rejestruje rozszerzenie
 #   macos/build.sh uninstall   wyrejestrowuje rozszerzenie i usuwa aplikację
 #
+# Kolorowanie składni (gohighlightgo) jest domyślnie włączone; TAGS=nohighlight macos/build.sh … buduje
+# bez niego (ADR 0003). Wersję paczki biorą pliki macos/*-Info.plist; test pilnuje, żeby zgadzała się
+# z preview.Version.
+#
 # Wymaga Go z cgo i narzędzi Xcode (swiftc, codesign). Podpis jest lokalny (ad hoc); inną tożsamość
 # podaje zmienna SIGN_IDENTITY.
 set -eu
@@ -23,6 +27,7 @@ APPEX="$APP/Contents/PlugIns/$EXT_NAME.appex"
 INSTALLED="$HOME/Applications/$APP_NAME.app"
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 SIGN_IDENTITY=${SIGN_IDENTITY:--}
+TAGS=${TAGS:-}
 
 uninstall() {
 	if [ -d "$INSTALLED" ]; then
@@ -40,11 +45,11 @@ if [ "${1:-}" = uninstall ]; then
 fi
 
 rm -rf "$BUILD"
-mkdir -p "$APP/Contents/MacOS" "$APPEX/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APPEX/Contents/MacOS"
 
 # 1. Biblioteka Go jako archiwum C.
 CGO_ENABLED=1 MACOSX_DEPLOYMENT_TARGET=$MIN_MACOS CGO_CFLAGS="-mmacosx-version-min=$MIN_MACOS" \
-	go build -trimpath -buildmode=c-archive -o "$BUILD/libbridge.a" ./bridge
+	go build -trimpath -tags "$TAGS" -buildmode=c-archive -o "$BUILD/libbridge.a" ./bridge
 
 # 2. Rozszerzenie: punkt wejścia daje system (_NSExtensionMain), klasę wskazuje Info.plist.
 xcrun swiftc -O -swift-version 5 -target "$TARGET" -parse-as-library -application-extension \
@@ -59,6 +64,11 @@ cp macos/Extension-Info.plist "$APPEX/Contents/Info.plist"
 xcrun swiftc -O -swift-version 5 -target "$TARGET" -parse-as-library -module-name "$APP_NAME" \
 	macos/App.swift -o "$APP/Contents/MacOS/$APP_NAME"
 cp macos/App-Info.plist "$APP/Contents/Info.plist"
+
+# Licencje jadą z aplikacją: nasza (Apache 2.0) i czcionek, które gomermaidgo wbudowuje w plik wykonywalny (OFL).
+cp LICENSE NOTICE "$APP/Contents/Resources/"
+FONTS=$(go list -m -f '{{.Dir}}' github.com/polestorm/gomermaidgo)/fonts
+cp "$FONTS"/OFL-*.txt "$APP/Contents/Resources/"
 
 # 4. Podpis: najpierw rozszerzenie, potem aplikacja. Rozszerzenie musi działać w piaskownicy.
 codesign --force --sign "$SIGN_IDENTITY" --options runtime --entitlements macos/Extension.entitlements "$APPEX"

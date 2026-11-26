@@ -25,7 +25,8 @@ Rozważone sposoby połączenia rozszerzenia z kodem w Go:
 3. Rozszerzenie oddaje systemowi gotowy HTML (podgląd oparty na danych, `QLIsDataBasedPreview`), bez własnego
    widoku i bez dostępu do sieci.
 4. Budowanie skryptem `build.sh`, bez projektu Xcode; podpis lokalny ad hoc; instalacja do `~/Applications`.
-5. Kolorowanie składni będzie opcją kompilacji (znacznik `highlight`), z biblioteki `gohighlightgo`.
+5. Kolorowanie składni przyjdzie z biblioteki `gohighlightgo`. Pierwotnie: opcja dołączana znacznikiem
+   `highlight`; zmienione w ADR 0003 na domyślnie włączone (znacznik `nohighlight` wyłącza).
 
 ## Skutki
 
