@@ -20,6 +20,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/polestorm/gopeekgo/tools/internal/rival"
 )
 
 // A probe is one feature: a file in testdata/features and the rule that reads the result from the page.
@@ -145,9 +147,9 @@ var probes = []probe{
 
 func main() {
 	var (
-		rival    = flag.String("rival", "/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli", "command-line converter of the other project")
-		rivalApp = flag.String("rival-app", "/Applications/QLMarkdown.app", "installed application of the other project")
-		tags     = flag.String("tags", "", "build tags for gopeekgo-render, for example nohighlight")
+		rivalPath = flag.String("rival", "/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli", "command-line converter of the other project")
+		rivalApp  = flag.String("rival-app", "/Applications/QLMarkdown.app", "installed application of the other project")
+		tags      = flag.String("tags", "", "build tags for gopeekgo-render, for example nohighlight")
 	)
 	flag.Parse()
 
@@ -159,7 +161,7 @@ func main() {
 	build.Stderr = os.Stderr
 	check(build.Run())
 
-	_, err = os.Stat(*rival)
+	_, err = os.Stat(*rivalPath)
 	rivalFound := err == nil
 
 	fmt.Println("## Environment")
@@ -168,17 +170,11 @@ func main() {
 	fmt.Printf("- gopeekgo: %s, commit %s, build tags %q\n", output(own, "-version"),
 		output("git", "rev-parse", "--short", "HEAD"), *tags)
 	if rivalFound {
-		fmt.Printf("- other project: %s, version %s\n", *rival,
+		fmt.Printf("- other project: %s, version %s\n", *rivalPath,
 			output("plutil", "-extract", "CFBundleShortVersionString", "raw", filepath.Join(*rivalApp, "Contents", "Info.plist")))
-		if settings := output(*rival, "--show-settings"); settings != "unknown" {
-			fmt.Println("- settings of the other project (`--show-settings`):")
-			fmt.Println()
-			fmt.Println("```")
-			fmt.Println(settings)
-			fmt.Println("```")
-		}
+		fmt.Printf("- arguments of the other project: `%s`\n", strings.Join(rival.Args(*rivalPath, "FILE"), " "))
 	} else {
-		fmt.Printf("- other project: not found at %s (use -rival); only gopeekgo is probed\n", *rival)
+		fmt.Printf("- other project: not found at %s (use -rival); only gopeekgo is probed\n", *rivalPath)
 	}
 	fmt.Println()
 
@@ -195,7 +191,7 @@ func main() {
 		ownHosts = append(ownHosts, hosts(a)...)
 		b := "—"
 		if rivalFound {
-			other := convert(*rival, path)
+			other := convert(*rivalPath, path)
 			otherScripts += strings.Count(other, "<script")
 			otherHosts = append(otherHosts, hosts(other)...)
 			b = p.read(newPage(other))
@@ -213,7 +209,7 @@ func main() {
 func convert(program, path string) string {
 	abs, err := filepath.Abs(program)
 	check(err)
-	cmd := exec.Command(abs, filepath.Base(path))
+	cmd := exec.Command(abs, rival.Args(abs, filepath.Base(path))...)
 	cmd.Dir = filepath.Dir(path)
 	out, err := cmd.Output()
 	if err != nil {

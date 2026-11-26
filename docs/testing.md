@@ -8,6 +8,8 @@
   not stop the preview; raw HTML does not reach the page; code blocks are highlighted and a block in an unknown
   language stays safe plain text; `preview.Version` equals `CFBundleShortVersionString` in both `Info.plist`
   files).
+- `go test ./tools/bench`: the input of the comparison is byte for byte the one listed in
+  `testdata/SHA256SUMS`, and every file in `testdata/bench` and `testdata/features` is listed.
 - `go test -tags nohighlight ./...`: the same without highlighting (the test checks that a code block is plain
   text).
 - The macOS part is checked by hand: `macos/build.sh install`, then `qlmanage -p file.md` or Space in Finder. The
@@ -21,6 +23,35 @@ feature rows) in the root of the repository, on the files in `testdata/bench/` a
 input (with checksums), the method and the limits are described in [`benchmark.md`](benchmark.md). Every number
 of the comparison in `README.md` must come from a row of this section; measurements made in another way are not
 published. The advantage is `(QLMarkdown − gopeekgo) / QLMarkdown × 100%`.
+
+### 2026-11-26, version 0.1.0, QLMarkdown 1.5.7 with fixed flags, application built by the tool
+
+The first run in which the results do not depend on the machine's setup: QLMarkdown gets the fixed flags of
+`tools/internal/rival` (its saved settings plus `--alert on`, appearance light), the size rows measure the
+application `tools/bench` builds from the tree, and `testdata/SHA256SUMS` pins the input. Environment: Apple M4,
+macOS 27.0.1, mains power, Go 1.26.6, gomdgo v0.1.1, gomermaidgo v0.1.0, gohighlightgo v0.1.2, 15 runs per cell.
+This section is the source of the README table.
+
+| input | size | gopeekgo, median (min) | QLMarkdown, median (min) | advantage | gopeekgo memory | QLMarkdown memory | advantage |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| `document.md` | 24,499 B | 3.7 ms (3.3 ms) | 21.4 ms (21.0 ms) | 82% | 8.0 MB | 21.8 MB | 63% |
+| `diagram.md` | 202 B | 3.3 ms (3.3 ms) | 17.0 ms (16.3 ms) | 80% | 8.8 MB | 18.3 MB | 52% |
+| 55 × `document.md` | 1,347,445 B | 15.9 ms (15.3 ms) | 212.1 ms (206.7 ms) | 93% | 32.8 MB | 59.6 MB | 45% |
+| `code.md` | 15,429 B | 3.7 ms (3.4 ms) | 48.3 ms (47.5 ms) | 92% | 8.6 MB | 21.2 MB | 59% |
+| 87 × `code.md` | 1,342,323 B | 30.5 ms (30.2 ms) | 2,207.3 ms (2,195.1 ms) | 99% | 42.9 MB | 57.2 MB | 25% |
+
+| size on disk | gopeekgo | QLMarkdown | advantage |
+|---|--:|--:|--:|
+| application, sum of file sizes | 7,259,274 B | 63,896,352 B | 89% |
+| extension bundle `.appex` | 7,177,500 B | 11,453,601 B | 37% |
+| extension executable, arm64 slice | 7,174,048 B | 5,426,192 B | −32% |
+
+The same with `-tags nohighlight` (criterion H5): 2.7, 2.6, 14.4, 2.4 and 10.2 ms; 6.3, 7.2, 30.5, 5.9 and
+18.2 MB; application 6,761,578 B, executable 6,676,352 B. Highlighting therefore adds 497,696 B to the
+executable, 0.7–1.3 ms on the small inputs and 20.3 ms on 1.3 MB of code, as in the run below.
+
+Feature probe in the same run (`tools/features`): as in the table of the feature section, except GitHub alerts,
+which QLMarkdown now renders (`yes`), because the fixed flags turn them on.
 
 ### 2026-11-26, version 0.1.0 with highlighting (gohighlightgo v0.1.2), working tree on `a6ff34b`
 
@@ -78,9 +109,6 @@ Environment: Apple M4, macOS 27.0.1, mains power, Go 1.26.6, gomdgo v0.1.1, gome
 | extension bundle `.appex` | 6,679,628 B | 11,453,601 B | 42% |
 | extension executable, arm64 slice | 6,676,176 B | 5,426,192 B | −23% |
 
-QLMarkdown keeps highlighting and diagrams outside its executable (`libwrapper_highlight.dylib` 6.9 MB,
-`mermaid.min.js.gz` 1.6 MB); ours contains everything, the Go runtime included.
-
 ### First measurement, 2026-11-25 (replaced)
 
 The first numbers (4.2 ms / 21.5 ms on 24 kB; 14.9 ms / 199.8 ms on 1.3 MB; application 6.6 MB / 64.0 MB) came
@@ -95,7 +123,7 @@ the tool recognises the result in the page is written in `tools/features/main.go
 the page without its `<style>` and `<script>` elements, so that a class name in a stylesheet does not pass for
 content (it did in the first version of the tool: QLMarkdown's alert came out "yes" because of its CSS).
 
-### 2026-11-26, version 0.1.0, QLMarkdown 1.5.7 with the settings above
+### 2026-11-26, version 0.1.0, QLMarkdown 1.5.7 with its saved settings (before the fixed flags)
 
 | feature | file | gopeekgo | QLMarkdown |
 |---|---|---|---|

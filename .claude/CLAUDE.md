@@ -26,7 +26,10 @@ Układ repozytorium i README trzymają schemat publicznych bibliotek rodziny (AD
   (`lsregister`, `pluginkit`). Bez projektu Xcode. Rejestracja bywa spóźniona, dlatego skrypt ją ponawia.
   `TAGS=nohighlight` buduje bez kolorowania; `LICENSE`, `NOTICE` i teksty OFL czcionek trafiają do `Resources`.
 - `cmd/gopeekgo-render`: ta sama strona co rozszerzenie, z wiersza poleceń (pomiary, oglądanie w przeglądarce).
-- `tools/bench`, `tools/features`: powtarzalne porównanie z QLMarkdown (`docs/benchmark.md`).
+- `tools/bench`, `tools/features`: powtarzalne porównanie z QLMarkdown (`docs/benchmark.md`). QLMarkdown dostaje
+  ustalone flagi z `tools/internal/rival` (nie zależy od ustawień w jego aplikacji); `tools/bench` sam buduje
+  aplikację do wierszy rozmiaru; wsad pilnuje `testdata/SHA256SUMS` i test w `tools/bench`. Zmiana wsadu =
+  nowe sumy i nowa sekcja w `docs/testing.md`.
 - Wersja: `preview.Version`; `CFBundleShortVersionString` w `macos/*-Info.plist` musi być taki sam (test).
 - **Wszystkie komentarze i dokumenty po angielsku** (ADR 0005): Go (także testy i kod nieeksportowany), Swift,
   `bridge.h`, `build.sh`, `docs/` z ADR. Wyjątki: zamrożony wsad `testdata/bench/`, teksty okna aplikacji

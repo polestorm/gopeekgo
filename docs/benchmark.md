@@ -6,8 +6,9 @@ the files in this repository. If you maintain one of the compared projects and g
 ## Repeat it
 
 Requirements: macOS, Go 1.22 or newer, this repository, and the other project installed (QLMarkdown puts its
-command-line converter in `/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli`). For the size
-rows gopeekgo must be installed too (`macos/build.sh install`).
+command-line converter in `/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli`) and the Xcode
+command line tools: for the size rows `tools/bench` builds the gopeekgo application itself with
+`macos/build.sh` (same build tags, not installed, removed afterwards), so what is installed does not matter.
 
 ```sh
 go run ./tools/bench                      # 15 runs per cell
@@ -18,7 +19,7 @@ go run ./tools/features                   # the feature rows (a few seconds)
 ```
 
 `bench` prints the environment (machine, system, power source, Go version, gopeekgo version and commit, build
-tags, library versions, version and settings of the other project) and two tables in Markdown; `features`
+tags, library versions, version and arguments of the other project) and two tables in Markdown; `features`
 prints the environment and one table. Without the other project both report gopeekgo alone.
 
 ## Input
@@ -32,30 +33,36 @@ prints the environment and one table. Without the other project both report gope
 | large code document | 1,342,323 B | generated | 87 copies of `code.md` joined, the same way |
 | [`testdata/features/`](../testdata/features/) | 17 files | | one small file per feature, read by `tools/features` |
 
-The files are frozen: a change to them is a change of the benchmark and gets a new section in
-`docs/testing.md`.
+The files are frozen: [`testdata/SHA256SUMS`](../testdata/SHA256SUMS) lists the SHA-256 of every file in
+`testdata/bench` and `testdata/features`, and `go test ./tools/bench` fails when a file differs or is missing
+from the list (`cd testdata && shasum -a 256 -c SHA256SUMS` checks the same by hand). A change to the input is
+a change of the benchmark: it updates the list and gets a new section in `docs/testing.md`.
 
 ## Method
 
 - **What runs.** For gopeekgo: `cmd/gopeekgo-render`, a command that writes exactly the page the Quick Look
   extension returns (`preview.Page`), built by the tool with `go build -trimpath`. For the other project: its
-  own command-line converter, with the file name as the only argument, as a black box. Its source is not read.
+  own command-line converter, as a black box, with a fixed set of flags and the file name (below). Its source
+  is not read.
 - **Time** is the wall-clock time of the whole process, from start to exit, with the output collected through
   a pipe. Each cell is the median of the runs; the minimum is printed beside it. One extra run before the
   measured ones warms the file cache and is discarded.
 - **Peak memory** is the maximum resident set size the system reports for the process (`getrusage`), median
   of the runs.
-- **Size on disk** is the sum of the sizes of the regular files in the installed bundle. The executable row
+- **Size on disk** is the sum of the sizes of the regular files in the bundle: for gopeekgo the one the tool
+  builds, for the other project the installed one. The executable row
   compares one architecture: for a universal file it takes the slice of the machine that runs the tool.
 - **Features.** `tools/features` converts each file in `testdata/features` with both programs, from the file's
   directory (so that a relative image can be found), and applies a fixed rule to the page: for example "the
   page contains `<del>struck</del>`" for strikethrough. The rules are in `tools/features/main.go`. They read the
   page without its `<style>` and `<script>` elements, so a class name in a stylesheet does not count as
   content; only the math rule and the script count look at the scripts.
-- **Settings of the other project.** QLMarkdown's converter reads the settings of its installed application,
-  and they change what it does (highlighting, Mermaid, alerts, emoji). Both tools run it with the file name
-  only and record `qlmarkdown_cli --show-settings` in their output; the settings used for the published
-  numbers are in [`testing.md`](testing.md).
+- **Settings of the other project.** QLMarkdown's converter would otherwise read the settings saved in its
+  application, and they change what it does (highlighting, Mermaid, alerts, emoji). Both tools pass every
+  setting that has a flag, the same on every machine: the list is
+  [`tools/internal/rival/rival.go`](../tools/internal/rival/rival.go), and both tools print it with their
+  results. It is the setup of a QLMarkdown 1.5.7 installation with GitHub alerts turned on, because gopeekgo
+  renders them too.
 - **Advantage** is `(other − gopeekgo) / other × 100%`. A negative value means gopeekgo is worse; it is
   published too.
 

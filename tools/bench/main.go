@@ -23,6 +23,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/polestorm/gopeekgo/tools/internal/rival"
 )
 
 // The large inputs are copies of the frozen files joined together, about 1.3 MB each.
@@ -44,13 +46,12 @@ type result struct {
 }
 
 func main() {
-	home, _ := os.UserHomeDir()
 	var (
-		runs     = flag.Int("runs", 15, "number of runs per program and input")
-		rival    = flag.String("rival", "/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli", "command-line converter of the other project")
-		rivalApp = flag.String("rival-app", "/Applications/QLMarkdown.app", "installed application of the other project")
-		ownApp   = flag.String("app", filepath.Join(home, "Applications", "Gopeekgo.app"), "installed gopeekgo application")
-		tags     = flag.String("tags", "", "build tags for gopeekgo-render, for example nohighlight")
+		runs      = flag.Int("runs", 15, "number of runs per program and input")
+		rivalPath = flag.String("rival", "/Applications/QLMarkdown.app/Contents/Resources/qlmarkdown_cli", "command-line converter of the other project")
+		rivalApp  = flag.String("rival-app", "/Applications/QLMarkdown.app", "installed application of the other project")
+		ownApp    = flag.String("app", "", "gopeekgo application to measure; empty: build it with macos/build.sh and the same -tags")
+		tags      = flag.String("tags", "", "build tags for gopeekgo-render, for example nohighlight")
 	)
 	flag.Parse()
 
@@ -62,6 +63,17 @@ func main() {
 	build := exec.Command("go", "build", "-trimpath", "-tags", *tags, "-o", own, "./cmd/gopeekgo-render")
 	build.Stderr = os.Stderr
 	check(build.Run())
+
+	// The size rows measure an application built from this tree with the same tags, not whatever is installed.
+	// It is removed afterwards: a second bundle with the extension's identifier confuses the system registry.
+	if *ownApp == "" && runtime.GOOS == "darwin" {
+		script := exec.Command("macos/build.sh")
+		script.Env = append(os.Environ(), "TAGS="+*tags)
+		script.Stdout, script.Stderr = os.Stderr, os.Stderr
+		check(script.Run())
+		*ownApp = filepath.Join("build", "Gopeekgo.app")
+		defer os.RemoveAll(*ownApp)
+	}
 
 	document, err := os.ReadFile("testdata/bench/document.md")
 	check(err)
@@ -81,7 +93,7 @@ func main() {
 	}
 
 	rivalFound := true
-	if _, err := os.Stat(*rival); err != nil {
+	if _, err := os.Stat(*rivalPath); err != nil {
 		rivalFound = false
 	}
 
@@ -97,18 +109,11 @@ func main() {
 	fmt.Printf("- libraries: %s\n", strings.ReplaceAll(output("go", "list", "-m", "github.com/polestorm/gomdgo",
 		"github.com/polestorm/gomermaidgo", "github.com/polestorm/gohighlightgo"), "\n", ", "))
 	if rivalFound {
-		fmt.Printf("- other project: %s, version %s\n", *rival,
+		fmt.Printf("- other project: %s, version %s\n", *rivalPath,
 			output("plutil", "-extract", "CFBundleShortVersionString", "raw", filepath.Join(*rivalApp, "Contents", "Info.plist")))
-		// QLMarkdown reads its settings from its application; they change what it does, so they are recorded.
-		if settings := output(*rival, "--show-settings"); settings != "unknown" {
-			fmt.Println("- settings of the other project (`--show-settings`):")
-			fmt.Println()
-			fmt.Println("```")
-			fmt.Println(settings)
-			fmt.Println("```")
-		}
+		fmt.Printf("- arguments of the other project: `%s`\n", strings.Join(rival.Args(*rivalPath, "FILE"), " "))
 	} else {
-		fmt.Printf("- other project: not found at %s (use -rival); only gopeekgo is measured\n", *rival)
+		fmt.Printf("- other project: not found at %s (use -rival); only gopeekgo is measured\n", *rivalPath)
 	}
 	fmt.Printf("- runs per cell: %d\n", *runs)
 	fmt.Println()
@@ -123,7 +128,7 @@ func main() {
 		a := measure(*runs, own, in.path)
 		row := fmt.Sprintf("| %s | %d B | %s (%s) |", in.label, info.Size(), ms(a.median), ms(a.min))
 		if rivalFound {
-			b := measure(*runs, *rival, in.path)
+			b := measure(*runs, *rivalPath, in.path)
 			row += fmt.Sprintf(" %s (%s) | %s | %s | %s | %s |", ms(b.median), ms(b.min),
 				advantage(float64(a.median), float64(b.median)), mb(a.memory), mb(b.memory),
 				advantage(float64(a.memory), float64(b.memory)))
@@ -151,7 +156,7 @@ func measure(runs int, program, path string) result {
 	var size int
 	for i := 0; i <= runs; i++ {
 		var out bytes.Buffer
-		cmd := exec.Command(program, path)
+		cmd := exec.Command(program, rival.Args(program, path)...)
 		cmd.Stdout = &out
 		start := time.Now()
 		err := cmd.Run()
