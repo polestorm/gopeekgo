@@ -30,7 +30,7 @@ condition of ADR 0003, point 4, for adding the dependency is met.
    drawn, raw HTML) get none. The advantage column in percent only on numbers.
 6. **Licences**: `NOTICE` lists the family libraries and the Arimo and Noto Emoji typefaces (SIL OFL 1.1) that
    gomermaidgo embeds in our executable; `macos/build.sh` copies `LICENSE`, `NOTICE` and the OFL texts into
-   `Gopeekgo.app/Contents/Resources`.
+   `GoPeekGo.app/Contents/Resources`.
 7. **A short README**, as in gohighlightgo: no "Status" section; installation and usage in `docs/usage.md`.
 
 ## Consequences

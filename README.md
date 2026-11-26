@@ -1,7 +1,7 @@
-# gopeekgo
+# GoPeekGo
 
-Quick Look preview of Markdown files on macOS, rendered in pure Go: select a `.md` file in Finder and press
-Space. [gomdgo](https://github.com/polestorm/gomdgo) turns CommonMark and GFM into HTML,
+GoPeekGo (module `gopeekgo`) is a Quick Look preview of Markdown files on macOS, rendered in pure Go: select a
+`.md` file in Finder and press Space. [gomdgo](https://github.com/polestorm/gomdgo) turns CommonMark and GFM into HTML,
 [gomermaidgo](https://github.com/polestorm/gomermaidgo) draws ` ```mermaid ` blocks as SVG and
 [gohighlightgo](https://github.com/polestorm/gohighlightgo) colours the code, all inside the extension: no
 JavaScript, no helper process, no network.
@@ -11,7 +11,7 @@ macos/build.sh install                                                # the Quic
 go install github.com/polestorm/gopeekgo/cmd/gopeekgo-render@latest   # the same page from the command line
 ```
 
-## Why gopeekgo
+## Why GoPeekGo
 
 Compared with a popular free and open-source competitor (details in [Comparison](#comparison)):
 
@@ -29,7 +29,7 @@ and signed ad hoc, and its extension executable is 32% larger.
 
 ## Contents
 
-- [Why gopeekgo](#why-gopeekgo) · [Comparison](#comparison) · [Documentation](#documentation) ·
+- [Why GoPeekGo](#why-gopeekgo) · [Comparison](#comparison) · [Documentation](#documentation) ·
   [License](#license)
 - [Usage](docs/usage.md): installing, turning another Markdown preview off, the command line, building without
   highlighting
@@ -38,7 +38,7 @@ and signed ad hoc, and its extension executable is 32% larger.
 
 ## Comparison
 
-| | gopeekgo 0.1.0 | QLMarkdown 1.5.7 | gopeekgo advantage[^adv] |
+| | GoPeekGo 0.1.0 | QLMarkdown 1.5.7 | GoPeekGo advantage[^adv] |
 |---|:---:|:---:|:---:|
 | Application on disk[^size] | 7.3 MB 🥇 | 63.9 MB | 89% |
 | Extension executable, arm64 | 7.2 MB | 5.4 MB 🥇 | −32% |
@@ -72,15 +72,15 @@ and signed ad hoc, and its extension executable is 32% larger.
 To repeat the comparison, see [docs/benchmark.md](docs/benchmark.md). If you maintain QLMarkdown and get
 different results, please open an issue.
 
-[^adv]: `(QLMarkdown − gopeekgo) / QLMarkdown × 100%`; a negative value means gopeekgo is worse. 🥇 marks the
+[^adv]: `(QLMarkdown − GoPeekGo) / QLMarkdown × 100%`; a negative value means GoPeekGo is worse. 🥇 marks the
     better value where one is better whatever the reader prefers; rows where the two are equal or where it is a
     matter of taste have none.
-[^size]: Sum of the file sizes in the application: for gopeekgo built from this repository by the measuring tool,
+[^size]: Sum of the file sizes in the application: for GoPeekGo built from this repository by the measuring tool,
     for QLMarkdown as installed. The executable row compares the arm64 slice of QLMarkdown's universal file.
 [^bench]: Whole process of each project's command-line converter (`gopeekgo-render`, which writes exactly the
     page the extension returns, and `qlmarkdown_cli` from the QLMarkdown bundle) on the frozen files in
     [`testdata/bench/`](testdata/bench/); median of 15 runs, peak memory from `getrusage`. `go run ./tools/bench`,
-    2026-11-26, Apple M4. gopeekgo's time includes drawing the diagram; QLMarkdown's does not, because
+    2026-11-26, Apple M4. GoPeekGo's time includes drawing the diagram; QLMarkdown's does not, because
     Mermaid.js draws it later in the preview. [More](docs/benchmark.md)
 [^feat]: The feature rows come from `go run ./tools/features`: one small file per feature in
     [`testdata/features/`](testdata/features/), converted by both programs, and a fixed rule that reads the page.
@@ -89,7 +89,7 @@ different results, please open an issue.
     matter.
 [^types]: Mermaid 12.2 recognises 33 diagram types; gomermaidgo draws 24 of them
     ([its comparison](https://github.com/polestorm/gomermaidgo#comparison)). QLMarkdown runs Mermaid 12.0 itself.
-[^img]: gopeekgo leaves the address in the page, and a Quick Look preview built from data cannot load it.
+[^img]: GoPeekGo leaves the address in the page, and a Quick Look preview built from data cannot load it.
 [^pop]: Stars and forks on 2026-11-25. The last release of QLMarkdown is from 2026-10-02. Architectures,
     distribution and license were checked with `lipo`, `spctl` and the GitHub API on the same day.
 

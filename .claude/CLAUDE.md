@@ -8,7 +8,7 @@ prawdziwych konsumentów wydanych wersji.
 
 Stan (2026-11-26): **wersja 0.1.0 przygotowana do upublicznienia** (ADR 0004), bez znacznika i jeszcze
 prywatna. Kolorowanie z `gohighlightgo` v0.1.2 włączone; polecenie `cmd/gopeekgo-render` daje tę samą stronę
-co rozszerzenie. Zainstalowany lokalnie w `~/Applications/Gopeekgo.app`.
+co rozszerzenie. Zainstalowany lokalnie w `~/Applications/GoPeekGo.app`.
 Zacznij od `README.md`, potem `docs/adr/0001-scope-and-build.md`, `docs/roadmap.md`, `docs/testing.md`.
 Układ repozytorium i README trzymają schemat publicznych bibliotek rodziny (ADR 0002): w korzeniu tylko
 `LICENSE`, `NOTICE`, `README.md`, `go.mod`, `go.sum`, `.gitignore`; nowe pliki idą do katalogów.

@@ -4,7 +4,7 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key><string>en</string>
 	<key>CFBundleDisplayName</key><string>GoPeekGo</string>
-	<key>CFBundleExecutable</key><string>Gopeekgo</string>
+	<key>CFBundleExecutable</key><string>GoPeekGo</string>
 	<key>CFBundleIdentifier</key><string>com.polestorm.gopeekgo</string>
 	<key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
 	<key>CFBundleName</key><string>GoPeekGo</string>

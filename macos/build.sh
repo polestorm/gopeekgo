@@ -1,7 +1,7 @@
 #!/bin/sh
-# Builds the "Gopeekgo" application with the Quick Look extension for Markdown files.
+# Builds the "GoPeekGo" application with the Quick Look extension for Markdown files.
 #
-#   macos/build.sh             builds build/Gopeekgo.app
+#   macos/build.sh             builds build/GoPeekGo.app
 #   macos/build.sh install     builds, moves it to ~/Applications and registers the extension
 #   macos/build.sh uninstall   unregisters the extension and removes the application
 #
@@ -14,7 +14,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-APP_NAME=Gopeekgo
+APP_NAME=GoPeekGo
 EXT_NAME=GopeekgoExtension
 EXT_ID=com.polestorm.gopeekgo.extension
 MIN_MACOS=13.0

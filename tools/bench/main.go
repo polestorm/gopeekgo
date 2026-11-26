@@ -71,7 +71,7 @@ func main() {
 		script.Env = append(os.Environ(), "TAGS="+*tags)
 		script.Stdout, script.Stderr = os.Stderr, os.Stderr
 		check(script.Run())
-		*ownApp = filepath.Join("build", "Gopeekgo.app")
+		*ownApp = filepath.Join("build", "GoPeekGo.app")
 		defer os.RemoveAll(*ownApp)
 	}
 

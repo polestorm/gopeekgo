@@ -29,5 +29,7 @@ and comments in the source are visible on pkg.go.dev and GitHub.
 - Update 2026-11-26: the application presents itself as **GoPeekGo** (owner's decision: easier to read for a
   person): the display name in System Settings and the menu bar (`CFBundleDisplayName`, `CFBundleName` of the
   application), the window and the footer of the preview. Everything else keeps the lowercase name of the
-  family: the repository, the Go module and packages, the commands, the bundle identifiers, the file name
-  `Gopeekgo.app` and the README.
+  family: the repository, the Go module and packages, the commands and the bundle identifiers.
+- Update 2026-11-26: the README and `docs/usage.md` call the application GoPeekGo too (the name the user sees
+  when it is installed), and the application file is `GoPeekGo.app`; what a reader types or copies (module
+  path, command, repository) stays lowercase.

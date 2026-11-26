@@ -8,14 +8,14 @@ Requires macOS 13 or newer, Go 1.22 or newer with cgo, and the Xcode command lin
 needed.
 
 ```sh
-macos/build.sh install                     # build, copy to ~/Applications/Gopeekgo.app, register the extension
+macos/build.sh install                     # build, copy to ~/Applications/GoPeekGo.app, register the extension
 TAGS=nohighlight macos/build.sh install    # the same without syntax highlighting (about 0.5 MB smaller)
 macos/build.sh uninstall                   # unregister and remove
 qlmanage -p README.md                      # show a preview without Finder
 ```
 
-The application is built for the architecture of the machine and signed ad hoc, for use on that machine. Its
-only job is to carry the extension; it shows a short note when opened. The footer of every preview names the
+The application, GoPeekGo, is built for the architecture of the machine and signed ad hoc, for use on that machine. Its
+only job is to carry the extension; it shows a short note when opened. The footer of every preview ("GoPeekGo 0.1.0 · …") names the
 version and the libraries, so you can tell which preview you are looking at.
 
 macOS uses one preview extension per file type. If another Markdown preview is installed, turn it off in System
