@@ -14,8 +14,14 @@ import (
 // libraries names the libraries that build the page, for the footer.
 const libraries = "gomdgo + gomermaidgo + gohighlightgo"
 
-// highlightCSS is the "auto" theme: light or dark with the system appearance, like the rest of the page.
-var highlightCSS, _ = highlight.ThemeCSS("auto")
+// highlightCSS is the "auto" theme on the screen: light or dark with the system appearance, like the rest of
+// the page. On paper the light theme follows it and wins, so a dark system appearance never prints dark code.
+var highlightCSS = themeCSS("auto") + "@media print{\n" + themeCSS("light") + "}\n"
+
+func themeCSS(name string) string {
+	css, _ := highlight.ThemeCSS(name)
+	return css
+}
 
 // addHighlighting registers every language name gohighlightgo knows; "mermaid" stays with the diagrams.
 func addHighlighting(blocks map[string]gomdgo.CodeBlockFunc) {

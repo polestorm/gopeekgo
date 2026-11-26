@@ -52,6 +52,8 @@ go install -tags nohighlight github.com/polestorm/gopeekgo/cmd/gopeekgo-render@l
 - Text in a centred column of 860 pixels; tables, code blocks and diagrams wider than that grow evenly up to
   the width of the window, so widening the Quick Look window gives them room.
 - Light and dark appearance, following the system.
+- Printing (from a browser, with the page of `gopeekgo-render`): light colours always, long code lines wrapped,
+  wide tables shrunk to the page, diagrams scaled to its width.
 - Raw HTML from the document is shown as text, and `javascript:` links are removed. The page has no scripts;
   its stylesheet and diagrams are inline.
 
