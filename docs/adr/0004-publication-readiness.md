@@ -39,5 +39,5 @@ condition of ADR 0003, point 4, for adding the dependency is met.
   because there are dependencies (as in gopdfgo); fewer files are not possible without giving up modules.
 - Highlighting costs 497,696 B of the executable and 0.7–1.1 ms on a small file (H5, `docs/testing.md`); the
   executable size against QLMarkdown went from −23% to −32%.
-- The texts of the host application are still in Polish; to be decided at publication.
+- The texts of the host application were still in Polish; translated on 2026-11-26 (ADR 0005).
 - `go install …@latest` from the README works only once the repository is public and tagged.

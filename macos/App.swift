@@ -7,14 +7,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let text = NSTextField(wrappingLabelWithString:
-            "Podgląd Markdown (gomdgo + gomermaidgo + gohighlightgo) jest zainstalowany.\n\n" +
-            "Zaznacz plik .md w Finderze i naciśnij spację. Rozszerzenie włączysz i wyłączysz " +
-            "w Ustawieniach systemowych: Ogólne → Rzeczy otwierane przy logowaniu i rozszerzenia → Quick Look.")
+            "The GoPeekGo Markdown preview (gomdgo + gomermaidgo + gohighlightgo) is installed.\n\n" +
+            "Select a .md file in Finder and press Space. To turn the extension on or off, open " +
+            "System Settings: General → Login Items & Extensions → Quick Look.")
         text.frame = NSRect(x: 24, y: 24, width: 432, height: 132)
 
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 480, height: 180),
                               styleMask: [.titled, .closable], backing: .buffered, defer: false)
-        window.title = "Gopeekgo"
+        window.title = "GoPeekGo"
         window.contentView?.addSubview(text)
         window.center()
         window.makeKeyAndOrderFront(nil)

@@ -53,7 +53,7 @@ func Page(src []byte, title string) (out []byte) {
 	out = append(out, "<main>\n"...)
 	out = append(out, body...)
 	out = append(out, "</main>\n"...)
-	out = fmt.Appendf(out, "<footer>gopeekgo %s · %s · %d B → %d B · %s</footer>\n",
+	out = fmt.Appendf(out, "<footer>GoPeekGo %s · %s · %d B → %d B · %s</footer>\n",
 		Version, libraries, len(src), len(body), elapsed.Round(10*time.Microsecond))
 	return append(out, "</body>\n</html>\n"...)
 }

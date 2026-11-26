@@ -17,7 +17,6 @@ and comments in the source are visible on pkg.go.dev and GitHub.
 3. Not covered:
    - the frozen benchmark input `testdata/bench/document.md` (a real document in Polish) and the Polish words in
      `testdata/bench/code.md` (part of gohighlightgo's corpus): changing them changes the benchmark;
-   - the texts the host application shows to the user (a separate decision, `docs/roadmap.md`, item 10);
    - the instructions for Claude Code in `.claude/CLAUDE.md`, which are for the owner's tools, not for readers;
    - the copyright holder's name in `NOTICE`.
 
@@ -25,3 +24,10 @@ and comments in the source are visible on pkg.go.dev and GitHub.
 
 - This repository departs from the family rule "comments and documentation in Polish"; new documents and
   comments are written in English from now on.
+- Update 2026-11-26: the text the host application shows is in English too (owner's decision), so the whole
+  application is in English.
+- Update 2026-11-26: the application presents itself as **GoPeekGo** (owner's decision: easier to read for a
+  person): the display name in System Settings and the menu bar (`CFBundleDisplayName`, `CFBundleName` of the
+  application), the window and the footer of the preview. Everything else keeps the lowercase name of the
+  family: the repository, the Go module and packages, the commands, the bundle identifiers, the file name
+  `Gopeekgo.app` and the README.

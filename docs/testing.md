@@ -13,7 +13,7 @@
 - `go test -tags nohighlight ./...`: the same without highlighting (the test checks that a code block is plain
   text).
 - The macOS part is checked by hand: `macos/build.sh install`, then `qlmanage -p file.md` or Space in Finder. The
-  footer of the page ("gopeekgo 0.1.0 · gomdgo + gomermaidgo + gohighlightgo · size · time") shows that the
+  footer of the page ("GoPeekGo 0.1.0 · gomdgo + gomermaidgo + gohighlightgo · size · time") shows that the
   preview comes from this extension, and from which variant.
 
 ## Comparison measurements: gopeekgo and QLMarkdown

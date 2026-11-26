@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key><string>pl</string>
-	<key>CFBundleDisplayName</key><string>Gopeekgo</string>
+	<key>CFBundleDevelopmentRegion</key><string>en</string>
+	<key>CFBundleDisplayName</key><string>GoPeekGo</string>
 	<key>CFBundleExecutable</key><string>GopeekgoExtension</string>
 	<key>CFBundleIdentifier</key><string>com.polestorm.gopeekgo.extension</string>
 	<key>CFBundleInfoDictionaryVersion</key><string>6.0</string>

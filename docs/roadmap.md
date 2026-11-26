@@ -14,5 +14,5 @@
 | 7 | distribution: universal binary, Developer ID, notarization | to be decided |
 | 8 | CI: `go vet`, `go test`, building the application on macOS (ADR 0002) | file ready; workflow disabled on GitHub (`gh workflow disable`) until the next billing period, 2026-11-25 |
 | 9 | publication: version 0.1.0, English doc comments, `NOTICE` with the OFL fonts, comparison with its input (ADR 0004) | ready for review (2026-11-26); visibility and the `v0.1.0` tag are the owner's decision |
-| 10 | texts of the host application in English for publication | to be decided |
+| 10 | texts of the host application in English for publication | done (2026-11-26) |
 | 11 | documentation in English: documents and comments (ADR 0005) | done (2026-11-26) |
