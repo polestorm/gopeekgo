@@ -27,7 +27,8 @@ condition of ADR 0003, point 4, for adding the dependency is met.
    `docs/testing.md`.
 5. **Medals** only where one value is better whatever the reader prefers (time, memory, size, having a feature,
    no scripts, popularity, the way of distribution); ties and rows that are a matter of taste (how diagrams are
-   drawn, raw HTML) get none. The advantage column in percent only on numbers.
+   drawn, raw HTML) get none. The advantage column in percent only on numbers (removed on 2026-11-26: the
+   other family READMEs have no such column; the "Why" section gives the advantages in percent).
 6. **Licences**: `NOTICE` lists the family libraries and the Arimo and Noto Emoji typefaces (SIL OFL 1.1) that
    gomermaidgo embeds in our executable; `macos/build.sh` copies `LICENSE`, `NOTICE` and the OFL texts into
    `GoPeekGo.app/Contents/Resources`.

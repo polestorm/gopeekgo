@@ -62,7 +62,8 @@ inne zostaje małymi literami. Identyfikatory paczek: `com.polestorm.gopeekgo` i
   z konkurencją w `README.md` ma wskazany wsad i metodę, a pomiar da się powtórzyć jednym poleceniem na plikach
   z repozytorium. Czas, pamięć i rozmiar: `go run ./tools/bench` na `testdata/bench/`, opis w `docs/benchmark.md`,
   wyniki w `docs/testing.md`. Pomiarów doraźnych nie publikujemy. Wiersze o funkcjach: `go run ./tools/features` na `testdata/features/` (jeden plik na funkcję);
-- liczby są datowane i podpisane sposobem pomiaru; porównania podajemy jako przewagę `gopeekgo` w procentach,
+- liczby są datowane i podpisane sposobem pomiaru; w `docs/testing.md` i w sekcji „Why” README porównania podajemy jako przewagę w procentach (tabela
+  porównania w README nie ma kolumny procentów, decyzja właściciela z 2026-11-26),
   `(konkurent − gopeekgo) / konkurent × 100%`; wartość ujemną też zapisujemy; `README.md` uaktualniamy razem
   z `docs/testing.md`;
 - po każdej zmianie części macOS: `macos/build.sh install` i obejrzenie podglądu (`qlmanage -p plik.md`); w liście

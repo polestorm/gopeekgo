@@ -38,43 +38,42 @@ and signed ad hoc, and its extension executable is 32% larger.
 
 ## Comparison
 
-| | GoPeekGo 0.1.0 | QLMarkdown 1.5.7 | GoPeekGo advantage[^adv] |
-|---|:---:|:---:|:---:|
-| Application on disk[^size] | 7.3 MB 🥇 | 63.9 MB | 89% |
-| Extension executable, arm64 | 7.2 MB | 5.4 MB 🥇 | −32% |
-| Time, 24 kB document[^bench] | 3.7 ms 🥇 | 21.4 ms | 82% |
-| Time, 0.2 kB with a diagram | 3.3 ms 🥇 | 17.0 ms | 80% |
-| Time, 1.3 MB document | 15.9 ms 🥇 | 212.1 ms | 93% |
-| Time, 15 kB of code in 19 languages | 3.7 ms 🥇 | 48.3 ms | 92% |
-| Time, 1.3 MB of code | 31 ms 🥇 | 2,207 ms | 99% |
-| Peak memory, 24 kB document | 8.0 MB 🥇 | 21.8 MB | 63% |
-| Peak memory, 1.3 MB document | 32.8 MB 🥇 | 59.6 MB | 45% |
-| Peak memory, 1.3 MB of code | 42.9 MB 🥇 | 57.2 MB | 25% |
-| Tables, task lists, strikethrough, `www.` links, footnotes, heading identifiers[^feat] | yes | yes | |
-| Syntax highlighting | yes | yes | |
-| GitHub alerts (`> [!NOTE]`) | yes | yes | |
-| Mermaid diagrams | drawn as SVG while the page is built | drawn by Mermaid.js in the preview | |
-| Mermaid diagram types[^types] | 24 of 33 | all of Mermaid 12.0 🥇 | |
-| Scripts in the page | none 🥇 | Mermaid.js and MathJax, from `cdn.jsdelivr.net` (or embedded, a setting) | |
-| Math | no | yes 🥇 | |
-| YAML front matter | read as Markdown | shown as metadata 🥇 | |
-| Emoji shortcodes (`:smile:`) | no | yes 🥇 | |
-| Image with a relative path[^img] | not shown | embedded in the page 🥇 | |
-| `<script>` in the source | shown as text | shown as text | |
-| Other raw HTML (`<b>`) | shown as text | rendered | |
-| `javascript:` link | removed 🥇 | kept | |
-| Settings | none | many, in its application 🥇 | |
-| Architectures | the building machine's | universal (arm64 + x86_64) 🥇 | |
-| Distribution | built from source, signed ad hoc | notarized, Developer ID 🥇 | |
-| License | Apache 2.0 | GPL 3.0 | |
-| GitHub popularity[^pop] | new | 3,795 stars, 124 forks 🥇 | |
+| | GoPeekGo 0.1.0[^medals] | QLMarkdown 1.5.7 |
+|---|:---:|:---:|
+| Application on disk[^size] | 7.3 MB 🥇 | 63.9 MB |
+| Extension executable, arm64 | 7.2 MB | 5.4 MB 🥇 |
+| Time, 24 kB document[^bench] | 3.7 ms 🥇 | 21.4 ms |
+| Time, 0.2 kB with a diagram | 3.3 ms 🥇 | 17.0 ms |
+| Time, 1.3 MB document | 15.9 ms 🥇 | 212.1 ms |
+| Time, 15 kB of code in 19 languages | 3.7 ms 🥇 | 48.3 ms |
+| Time, 1.3 MB of code | 31 ms 🥇 | 2,207 ms |
+| Peak memory, 24 kB document | 8.0 MB 🥇 | 21.8 MB |
+| Peak memory, 1.3 MB document | 32.8 MB 🥇 | 59.6 MB |
+| Peak memory, 1.3 MB of code | 42.9 MB 🥇 | 57.2 MB |
+| Tables, task lists, strikethrough, `www.` links, footnotes, heading identifiers[^feat] | yes | yes |
+| Syntax highlighting | yes | yes |
+| GitHub alerts (`> [!NOTE]`) | yes | yes |
+| Mermaid diagrams | drawn as SVG while the page is built | drawn by Mermaid.js in the preview |
+| Mermaid diagram types[^types] | 24 of 33 | all of Mermaid 12.0 🥇 |
+| Scripts in the page | none 🥇 | Mermaid.js and MathJax, from `cdn.jsdelivr.net` (or embedded, a setting) |
+| Math | no | yes 🥇 |
+| YAML front matter | read as Markdown | shown as metadata 🥇 |
+| Emoji shortcodes (`:smile:`) | no | yes 🥇 |
+| Image with a relative path[^img] | not shown | embedded in the page 🥇 |
+| `<script>` in the source | shown as text | shown as text |
+| Other raw HTML (`<b>`) | shown as text | rendered |
+| `javascript:` link | removed 🥇 | kept |
+| Settings | none | many, in its application 🥇 |
+| Architectures | the building machine's | universal (arm64 + x86_64) 🥇 |
+| Distribution | built from source, signed ad hoc | notarized, Developer ID 🥇 |
+| License | Apache 2.0 | GPL 3.0 |
+| GitHub popularity[^pop] | new | 3,795 stars, 124 forks 🥇 |
 
 To repeat the comparison, see [docs/benchmark.md](docs/benchmark.md). If you maintain QLMarkdown and get
 different results, please open an issue.
 
-[^adv]: `(QLMarkdown − GoPeekGo) / QLMarkdown × 100%`; a negative value means GoPeekGo is worse. 🥇 marks the
-    better value where one is better whatever the reader prefers; rows where the two are equal or where it is a
-    matter of taste have none.
+[^medals]: 🥇 marks the better value where one is better whatever the reader prefers; rows where the two are
+    equal or where it is a matter of taste have none.
 [^size]: Sum of the file sizes in the application: for GoPeekGo built from this repository by the measuring tool,
     for QLMarkdown as installed. The executable row compares the arm64 slice of QLMarkdown's universal file.
 [^bench]: Whole process of each project's command-line converter (`gopeekgo-render`, which writes exactly the
