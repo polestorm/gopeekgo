@@ -28,7 +28,9 @@ Układ repozytorium i README trzymają schemat publicznych bibliotek rodziny (AD
 - `cmd/gopeekgo-render`: ta sama strona co rozszerzenie, z wiersza poleceń (pomiary, oglądanie w przeglądarce).
 - `tools/bench`, `tools/features`: powtarzalne porównanie z QLMarkdown (`docs/benchmark.md`).
 - Wersja: `preview.Version`; `CFBundleShortVersionString` w `macos/*-Info.plist` musi być taki sam (test).
-- Komentarze dokumentacyjne pakietów i poleceń po angielsku (pkg.go.dev, ADR 0004); reszta komentarzy po polsku.
+- **Wszystkie komentarze i dokumenty po angielsku** (ADR 0005): Go (także testy i kod nieeksportowany), Swift,
+  `bridge.h`, `build.sh`, `docs/` z ADR. Wyjątki: zamrożony wsad `testdata/bench/`, teksty okna aplikacji
+  (do decyzji) i ten plik.
 
 Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extension`. Obsługiwany typ pliku:
 `net.daringfireball.markdown`.
@@ -62,8 +64,8 @@ Identyfikatory paczek: `com.polestorm.gopeekgo` i `com.polestorm.gopeekgo.extens
   z `docs/testing.md`;
 - po każdej zmianie części macOS: `macos/build.sh install` i obejrzenie podglądu (`qlmanage -p plik.md`); w liście
   `pluginkit -m -A -p com.apple.quicklook.preview` znak `+` oznacza rozszerzenie włączone, `-` wyłączone;
-- nazwy plików, pakietów i identyfikatorów po angielsku (także w Swifcie); komentarze i dokumentacja po polsku;
-  `README.md` po angielsku; teksty widoczne dla użytkownika aplikacji po polsku (do decyzji: angielski
+- nazwy plików, pakietów i identyfikatorów po angielsku (także w Swifcie); komentarze i dokumentacja też po
+  angielsku (ADR 0005, odstępstwo od reguły rodziny); teksty widoczne dla użytkownika aplikacji po polsku (do decyzji: angielski
   przy publikacji);
 - każda decyzja = plik w `docs/adr/`; licencja: Apache 2.0;
 - repozytorium `github.com/polestorm/gopeekgo` (do upublicznienia, ADR 0004); `gomdgo`, `gomermaidgo`

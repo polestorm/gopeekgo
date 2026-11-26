@@ -1,15 +1,18 @@
-# Plan
+# Roadmap
 
-| # | Zakres | Stan |
+[← README](../README.md)
+
+| # | Scope | State |
 |---|---|---|
-| 0 | prototyp: strona podglądu, most C, rozszerzenie, `macos/build.sh`, instalacja lokalna | gotowy (2026-11-25) |
-| 1 | obejrzenie na dokumentach rzeczywistych: tryb ciemny, długie tabele, szerokie diagramy, duże pliki; lista znalezisk dla bibliotek | nie rozpoczęty |
-| 2 | obrazy o ścieżkach względnych (załączniki odpowiedzi podglądu) | nie rozpoczęty |
-| 3 | przełącznik w `macos/build.sh` do budowania z lokalnych kopii bibliotek (`go.work`) | nie rozpoczęty |
-| 4 | kolorowanie składni z `gohighlightgo`, domyślnie włączone, znacznik `nohighlight` wyłącza (ADR 0003); pomiar rozmiaru i czasu w obu wariantach; warunek wydania | gotowy z `gohighlightgo` v0.1.2, H5 zmierzone (2026-11-26); wydanie czeka na decyzję właściciela |
-| 5 | porównanie z konkurencją na rynku (QLMarkdown, podgląd systemowy, inne): rozmiar, czas, pamięć, funkcje; tabela w `README.md` | QLMarkdown powtarzalnie (`tools/bench`, `tools/features`, 2026-11-26); inne podglądy do dodania |
-| 6 | czas od spacji do obrazu (nie tylko konwersja) | nie rozpoczęty |
-| 7 | rozpowszechnianie: binarka uniwersalna, Developer ID, notaryzacja | do decyzji |
-| 8 | CI: `go vet`, `go test`, budowanie aplikacji na macOS (ADR 0002) | plik gotowy; przepływ wyłączony w GitHubie (`gh workflow disable`) do nowego okresu rozliczeniowego, 2026-11-25 |
-| 9 | upublicznienie: wersja 0.1.0, komentarze po angielsku, `NOTICE` z czcionkami OFL, porównanie z wsadem (ADR 0004) | gotowe do przeglądu (2026-11-26); zmiana widoczności i znacznik `v0.1.0` na decyzję właściciela |
-| 10 | teksty aplikacji-nośnika po angielsku przy publikacji (`CLAUDE.md`) | do decyzji |
+| 0 | prototype: preview page, C bridge, extension, `macos/build.sh`, local install | done (2026-11-25) |
+| 1 | look at real documents: dark mode, long tables, wide diagrams, large files; list of findings for the libraries | not started |
+| 2 | images with relative paths (attachments of the preview reply) | not started |
+| 3 | a switch in `macos/build.sh` to build with local copies of the libraries (`go.work`) | not started |
+| 4 | syntax highlighting from gohighlightgo, on by default, the `nohighlight` tag turns it off (ADR 0003); size and time measured in both variants; a condition of the release | done with gohighlightgo v0.1.2, H5 measured (2026-11-26); the release waits for the owner's decision |
+| 5 | comparison with other previews on the market (QLMarkdown, the system preview, others): size, time, memory, features; table in `README.md` | QLMarkdown, repeatable (`tools/bench`, `tools/features`, 2026-11-26); other previews to be added |
+| 6 | time from pressing Space to seeing the page (not only conversion) | not started |
+| 7 | distribution: universal binary, Developer ID, notarization | to be decided |
+| 8 | CI: `go vet`, `go test`, building the application on macOS (ADR 0002) | file ready; workflow disabled on GitHub (`gh workflow disable`) until the next billing period, 2026-11-25 |
+| 9 | publication: version 0.1.0, English doc comments, `NOTICE` with the OFL fonts, comparison with its input (ADR 0004) | ready for review (2026-11-26); visibility and the `v0.1.0` tag are the owner's decision |
+| 10 | texts of the host application in English for publication | to be decided |
+| 11 | documentation in English: documents and comments (ADR 0005) | done (2026-11-26) |

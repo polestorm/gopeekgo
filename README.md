@@ -100,8 +100,8 @@ different results, please open an issue.
 
 - [`docs/usage.md`](docs/usage.md): installing and using the preview and the command.
 - [`docs/benchmark.md`](docs/benchmark.md): how the comparison is measured, with the input files.
-- In Polish: [`docs/testing.md`](docs/testing.md) (tests and the results of every measurement),
-  [`docs/adr/`](docs/adr/) (decisions), [`docs/roadmap.md`](docs/roadmap.md).
+- [`docs/testing.md`](docs/testing.md): tests and the results of every measurement.
+- [`docs/adr/`](docs/adr/): decisions; [`docs/roadmap.md`](docs/roadmap.md): what is done and what is next.
 
 ## License
 

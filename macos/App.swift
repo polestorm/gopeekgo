@@ -1,7 +1,7 @@
 import Cocoa
 
-// Aplikacja-nośnik: macOS rejestruje rozszerzenie Quick Look tylko jako część aplikacji.
-// Sama pokazuje jedynie krótką informację i kończy pracę po zamknięciu okna.
+// The host application: macOS registers a Quick Look extension only as part of an application.
+// It only shows a short note and quits when its window is closed.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
 

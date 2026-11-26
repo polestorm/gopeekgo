@@ -1,43 +1,43 @@
-# 0004 Przygotowanie do upublicznienia: wersja, kolorowanie, porównanie, licencje
+# 0004 Getting ready for publication: version, highlighting, comparison, licences
 
-Status: przyjęta · 2026-11-26 (polecenie właściciela: ujednolicić repozytorium z publicznymi `gomdgo`,
-`gomermaidgo`, `gopdfgo`, `gohighlightgo` przed upublicznieniem)
+Status: accepted · 2026-11-26 (owner's request: make the repository consistent with the public gomdgo,
+gomermaidgo, gopdfgo and gohighlightgo before publishing it)
 
-## Kontekst
+## Context
 
-Właściciel chce wkrótce upublicznić `gopeekgo`. Publiczne repozytoria rodziny mają: numer wersji w tabeli
-porównania i w poleceniach, komentarze dokumentacyjne po angielsku (pokazuje je pkg.go.dev; `gohighlightgo`
-v0.1.2), porównanie powtarzalne na zamrożonym wsadzie z opisaną metodą, mało plików w katalogu głównym,
-licencję Apache 2.0 i `NOTICE` z listą cudzych składników. `gohighlightgo` wydało v0.1.2 i jest publiczne,
-więc warunek z ADR 0003, punkt 4, dla dopisania zależności jest spełniony.
+The owner wants to make gopeekgo public soon. The public repositories of the family have: a version number in the
+comparison table and in their commands, English doc comments (pkg.go.dev shows them; gohighlightgo v0.1.2), a
+repeatable comparison on frozen input with a described method, few files in the root, the Apache 2.0 licence and
+a `NOTICE` that lists the parts by other authors. gohighlightgo has released v0.1.2 and is public, so the
+condition of ADR 0003, point 4, for adding the dependency is met.
 
-## Decyzja
+## Decision
 
-1. **Wersja 0.1.0** w jednym miejscu: `preview.Version`. Pokazują ją stopka podglądu, `gopeekgo-render -version`
-   i nagłówek tabeli w README; `CFBundleShortVersionString` w obu `macos/*-Info.plist` musi być taki sam
-   (`TestVersionMatchesBundles`). Znacznika `v0.1.0` nie nadajemy bez decyzji właściciela (ADR 0003, punkt 3).
-2. **Kolorowanie** z `gohighlightgo` v0.1.2 w `go.mod`, domyślnie włączone; adapter z
-   `gohighlightgo/docs/adapters/gopeekgo.patch`. `macos/build.sh` przyjmuje `TAGS=nohighlight`.
-3. **Komentarze dokumentacyjne po angielsku** w pakietach i poleceniach, które pokaże pkg.go.dev (`preview`,
-   `bridge`, `cmd/gopeekgo-render`, `tools/bench`, `tools/features`); pozostałe komentarze, dokumentacja
-   wewnętrzna i ADR zostają po polsku, jak w bibliotekach.
-4. **Porównanie z wsadem i metodą**: czas, pamięć i rozmiar z `tools/bench` na `testdata/bench/` (doszedł wsad
-   z kodem `code.md`, bo teraz kolorujemy), wiersze o funkcjach z `tools/features` na `testdata/features/`
-   (jeden plik na funkcję, reguła rozpoznania w kodzie). Oba narzędzia zapisują ustawienia QLMarkdown, bo od
-   nich zależy wynik. Opis po angielsku w `docs/benchmark.md`, wyniki w `docs/testing.md`.
-5. **Medale** tylko tam, gdzie jedna wartość jest lepsza bez względu na upodobania czytelnika (czas, pamięć,
-   rozmiar, obecność funkcji, brak skryptów, popularność, sposób dystrybucji); remisy i wiersze zależne od gustu
-   (sposób rysowania diagramów, surowy HTML) bez medalu. Kolumna przewagi w procentach tylko przy liczbach.
-6. **Licencje**: `NOTICE` wymienia biblioteki rodziny i czcionki Arimo i Noto Emoji (SIL OFL 1.1), które
-   `gomermaidgo` wbudowuje w nasz plik wykonywalny; `macos/build.sh` kopiuje `LICENSE`, `NOTICE` i teksty OFL do
+1. **Version 0.1.0** in one place: `preview.Version`. The preview footer, `gopeekgo-render -version` and the
+   heading of the README table show it; `CFBundleShortVersionString` in both `macos/*-Info.plist` files must be
+   the same (`TestVersionMatchesBundles`). No `v0.1.0` tag without the owner's decision (ADR 0003, point 3).
+2. **Highlighting** from gohighlightgo v0.1.2 in `go.mod`, on by default; the adapter from
+   `gohighlightgo/docs/adapters/gopeekgo.patch`. `macos/build.sh` accepts `TAGS=nohighlight`.
+3. **English doc comments** in the packages and commands pkg.go.dev shows (`preview`, `bridge`,
+   `cmd/gopeekgo-render`, `tools/bench`, `tools/features`). (Extended to all comments and documents by ADR 0005.)
+4. **Comparison with its input and method**: time, memory and size from `tools/bench` on `testdata/bench/` (with
+   a new input full of code, `code.md`, since we highlight now), the feature rows from `tools/features` on
+   `testdata/features/` (one file per feature, the recognition rule in the code). Both tools record QLMarkdown's
+   settings, because the result depends on them. The method is in `docs/benchmark.md`, the results in
+   `docs/testing.md`.
+5. **Medals** only where one value is better whatever the reader prefers (time, memory, size, having a feature,
+   no scripts, popularity, the way of distribution); ties and rows that are a matter of taste (how diagrams are
+   drawn, raw HTML) get none. The advantage column in percent only on numbers.
+6. **Licences**: `NOTICE` lists the family libraries and the Arimo and Noto Emoji typefaces (SIL OFL 1.1) that
+   gomermaidgo embeds in our executable; `macos/build.sh` copies `LICENSE`, `NOTICE` and the OFL texts into
    `Gopeekgo.app/Contents/Resources`.
-7. **README** krótkie, jak w `gohighlightgo`: bez sekcji „Status”; instalacja i użycie w `docs/usage.md`.
+7. **A short README**, as in gohighlightgo: no "Status" section; installation and usage in `docs/usage.md`.
 
-## Skutki
+## Consequences
 
-- W katalogu głównym zostają `LICENSE`, `NOTICE`, `README.md`, `go.mod`, `go.sum` i `.gitignore`. `go.sum` jest
-  konieczny, bo mamy zależności (jak `gopdfgo`); mniej plików się nie da bez rezygnacji z modułów.
-- Kolorowanie kosztuje 497 696 B pliku wykonywalnego i 0,7–1,1 ms na małym pliku (H5, `docs/testing.md`);
-  przewaga rozmiaru pliku wykonywalnego wobec QLMarkdown spadła z −23% do −32%.
-- Teksty aplikacji-nośnika są dalej po polsku; przy publikacji do decyzji (`CLAUDE.md`).
-- `go install …@latest` z README zadziała dopiero po upublicznieniu repozytorium i nadaniu znacznika.
+- The root keeps `LICENSE`, `NOTICE`, `README.md`, `go.mod`, `go.sum` and `.gitignore`. `go.sum` is needed
+  because there are dependencies (as in gopdfgo); fewer files are not possible without giving up modules.
+- Highlighting costs 497,696 B of the executable and 0.7–1.1 ms on a small file (H5, `docs/testing.md`); the
+  executable size against QLMarkdown went from −23% to −32%.
+- The texts of the host application are still in Polish; to be decided at publication.
+- `go install …@latest` from the README works only once the repository is public and tagged.

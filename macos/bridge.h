@@ -1,4 +1,4 @@
-// Deklaracje funkcji eksportowanych z ../bridge/main.go (archiwum Go) dla kodu w Swifcie.
+// Declarations of the functions exported by ../bridge/main.go (the Go archive), for the Swift code.
 #ifndef GOPEEKGO_BRIDGE_H
 #define GOPEEKGO_BRIDGE_H
 

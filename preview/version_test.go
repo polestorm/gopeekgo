@@ -15,7 +15,7 @@ func TestVersionMatchesBundles(t *testing.T) {
 		}
 		m := re.FindSubmatch(data)
 		if m == nil || string(m[1]) != Version {
-			t.Errorf("%s: CFBundleShortVersionString %q, a preview.Version to %q", name, m, Version)
+			t.Errorf("%s: CFBundleShortVersionString is %q, preview.Version is %q", name, m, Version)
 		}
 	}
 }

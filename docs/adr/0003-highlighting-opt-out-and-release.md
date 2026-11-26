@@ -1,27 +1,34 @@
-# 0003 Kolorowanie składni domyślnie włączone; wydanie czeka na gohighlightgo
+# 0003 Syntax highlighting on by default; the release waits for gohighlightgo
 
-Status: przyjęta · 2026-11-25 (decyzja właściciela; zmienia punkt 5 ADR 0001)
+Status: accepted · 2026-11-25 (owner's decision; changes point 5 of ADR 0001)
 
-## Kontekst
+## Context
 
-ADR 0001 zakładał kolorowanie jako opcję dołączaną przy kompilacji (znacznik `highlight`). Podgląd ogląda
-człowiek, jego HTML nie trafia do dalszego przetwarzania, a konkurencja (QLMarkdown) koloruje domyślnie.
-Biblioteka `gohighlightgo` jest w budowie w osobnym repozytorium.
+ADR 0001 planned highlighting as an option added at build time (the `highlight` tag). A preview is read by a
+person, its HTML goes nowhere else, and the competitor (QLMarkdown) highlights by default. The gohighlightgo
+library is being built in a separate repository.
 
-## Decyzja
+## Decision
 
-1. Kolorowanie składni jest w `gopeekgo` **domyślnie włączone** (opt-out). Zwykłe budowanie dołącza
-   `gohighlightgo`; znacznik `nohighlight` je wyłącza: `preview/highlight.go` ma `//go:build !nohighlight`,
-   a `preview/nohighlight.go` (`//go:build nohighlight`) daje pustą mapę.
-2. Skrypt budujący dostaje przełącznik, który przekazuje `-tags nohighlight`. Służy też do pomiaru: rozmiar
-   rozszerzenia i czas konwersji mierzymy w obu wariantach (kryterium H5 w `gohighlightgo`).
-3. **Wydanie `gopeekgo` czeka, aż `gohighlightgo` będzie dojrzałe** (spełnione jego kryteria przyjęcia i wydana
-   wersja). Do tego czasu `gopeekgo` zostaje prototypem budowanym lokalnie, bez znacznika wersji.
-4. `go.mod` wskazuje wyłącznie wydane wersje bibliotek (ADR 0001, punkt 1), więc zależność od `gohighlightgo`
-   dopisujemy dopiero po jego pierwszym wydaniu. Wcześniejsze próby robimy lokalnie przez `go.work`, bez commita.
+1. Syntax highlighting is **on by default** in gopeekgo (opt-out). A plain build includes gohighlightgo; the
+   `nohighlight` tag turns it off: `preview/highlight.go` has `//go:build !nohighlight`, and
+   `preview/nohighlight.go` (`//go:build nohighlight`) leaves the code blocks to gomdgo.
+2. The build script gets a switch that passes `-tags nohighlight`. It also serves measurement: the size of the
+   extension and the conversion time are measured in both variants (criterion H5 of gohighlightgo).
+3. **The gopeekgo release waits until gohighlightgo is mature** (its acceptance criteria met and a version
+   released). Until then gopeekgo stays a locally built prototype without a version tag.
+4. `go.mod` points only to released versions of the libraries (ADR 0001, point 1), so the dependency on
+   gohighlightgo is added only after its first release. Earlier trials are made locally with `go.work`, without
+   a commit.
 
-## Skutki
+## Consequences
 
-- Pozostali odbiorcy (`gomdgo/cmd/gomdgo-mermaid`, `gopressgo`) zostają przy dołączaniu na życzenie; ta decyzja
-  dotyczy tylko `gopeekgo`. Sama biblioteka `gomdgo` nie zna `gohighlightgo`.
-- ADR 0001 w `gohighlightgo` opisuje u odbiorców znacznik `highlight`; dla `gopeekgo` obowiązuje ten dokument.
+- The other consumers (`gomdgo/cmd/gomdgo-mermaid`, `gopressgo`) keep highlighting as an option; this decision
+  concerns gopeekgo only. The gomdgo library itself does not know gohighlightgo.
+- ADR 0001 of gohighlightgo describes the `highlight` tag for consumers; for gopeekgo this document applies.
+
+## Update 2026-11-26
+
+gohighlightgo v0.1.2 is released and public, so point 4 is met: the dependency is in `go.mod` and the adapter
+from `gohighlightgo/docs/adapters/gopeekgo.patch` is applied (ADR 0004). The switch of point 2 is
+`TAGS=nohighlight macos/build.sh`. Point 3 still holds: the version tag is the owner's decision.

@@ -1,37 +1,39 @@
-# 0001 Zakres i sposób budowania
+# 0001 Scope and build
 
-Status: przyjęta · 2026-11-25 (polecenie właściciela: osobny projekt zależny od `gomdgo` i `gomermaidgo`,
-nazwa `gopeekgo`, licencja Apache 2.0)
+Status: accepted · 2026-11-25 (owner's request: a separate project depending on gomdgo and gomermaidgo, named
+gopeekgo, Apache 2.0 licence)
 
-## Kontekst
+## Context
 
-Właściciel chce oglądać dowolne pliki Markdown wynikiem `gomdgo` i `gomermaidgo` wprost w Finderze (spacja).
-Do tej pory robiło to obce rozszerzenie (QLMarkdown) z innym parserem. macOS przyjmuje rozszerzenie Quick Look
-tylko jako część aplikacji, napisane natywnie i działające w piaskownicy. Prototyp powstał w
-`gomdgo/tools/quicklook` i został tu przeniesiony tego samego dnia, bez commita tam.
+The owner wants to look at any Markdown file as gomdgo and gomermaidgo render it, directly in Finder (Space).
+Until now another extension (QLMarkdown) with another parser did this. macOS accepts a Quick Look extension only
+as part of an application, written natively and running in the sandbox. The prototype was made in
+`gomdgo/tools/quicklook` and moved here the same day, without a commit there.
 
-Rozważone sposoby połączenia rozszerzenia z kodem w Go:
+Ways considered to connect the extension with the Go code:
 
-1. **Uruchamianie programu `gomdgo-mermaid` z rozszerzenia.** Odrzucone: piaskownica utrudnia uruchamianie
-   programów, a rodzina ich unika (`gomdgo`, ADR 0014).
-2. **Archiwum C z Go łączone z rozszerzeniem** (`go build -buildmode=c-archive`). Wybrane.
+1. **Running the `gomdgo-mermaid` program from the extension.** Rejected: the sandbox makes starting programs
+   hard, and the family avoids it (gomdgo, ADR 0014).
+2. **A C archive built from Go and linked into the extension** (`go build -buildmode=c-archive`). Chosen.
 
-## Decyzja
+## Decision
 
-1. Osobne repozytorium i moduł `github.com/polestorm/gopeekgo`, zależne od wydanych wersji bibliotek, bez
-   `replace`. Projekt jest konsumentem publicznego API, nie narzędziem wewnętrznym `gomdgo`.
-2. `preview.Page(src, title)` buduje stronę w czystym Go i nie zwraca błędu. Konfiguracja `gomdgo`: GFM, bloki
-   uwag, przypisy, identyfikatory nagłówków; surowy HTML zapisany jako tekst (polityka domyślna biblioteki).
-3. Rozszerzenie oddaje systemowi gotowy HTML (podgląd oparty na danych, `QLIsDataBasedPreview`), bez własnego
-   widoku i bez dostępu do sieci.
-4. Budowanie skryptem `build.sh`, bez projektu Xcode; podpis lokalny ad hoc; instalacja do `~/Applications`.
-5. Kolorowanie składni przyjdzie z biblioteki `gohighlightgo`. Pierwotnie: opcja dołączana znacznikiem
-   `highlight`; zmienione w ADR 0003 na domyślnie włączone (znacznik `nohighlight` wyłącza).
+1. A separate repository and module `github.com/polestorm/gopeekgo`, depending on released versions of the
+   libraries, without `replace`. The project is a consumer of the public API, not an internal tool of gomdgo.
+2. `preview.Page(src, title)` builds the page in pure Go and returns no error. gomdgo configuration: GFM, alerts,
+   footnotes, heading identifiers; raw HTML written as text (the library's default policy).
+3. The extension hands the system finished HTML (a data-based preview, `QLIsDataBasedPreview`), with no view of
+   its own and no network access.
+4. Built by a script, `build.sh` (now `macos/build.sh`, ADR 0002), without an Xcode project; signed locally ad
+   hoc; installed into `~/Applications`.
+5. Syntax highlighting will come from the gohighlightgo library. Originally an option added with the
+   `highlight` tag; changed in ADR 0003 to on by default (the `nohighlight` tag turns it off).
 
-## Skutki
+## Consequences
 
-- Obrazy o ścieżkach względnych nie są wczytywane; do zrobienia jako załączniki odpowiedzi podglądu.
-- Budowane dla architektury komputera, na którym uruchomiono `build.sh`; rozpowszechnianie wymaga podpisu
-  Developer ID, notaryzacji i binarki uniwersalnej (osobna decyzja).
-- System wybiera jedno rozszerzenie na typ pliku; inne rozszerzenie dla Markdown trzeba wyłączyć.
-- CI nie jest założone: testy `preview` potrzebują dostępu do prywatnych modułów rodziny.
+- Images with relative paths are not loaded; to be done as attachments of the preview reply.
+- Built for the architecture of the machine that runs the build script; distribution needs a Developer ID
+  signature, notarization and a universal binary (a separate decision).
+- The system picks one extension per file type; another Markdown extension has to be turned off.
+- No CI at first: the tests of `preview` needed access to the private modules of the family (changed in ADR
+  0002, once the libraries were public).

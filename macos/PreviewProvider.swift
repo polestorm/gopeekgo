@@ -2,8 +2,8 @@ import Cocoa
 import Quartz
 import UniformTypeIdentifiers
 
-// Rozszerzenie Quick Look: czyta plik Markdown i oddaje stronę HTML zbudowaną przez gomdgo
-// i gomermaidgo (archiwum Go, funkcje z bridge.h). System sam wyświetla HTML, więc nie ma tu widoku.
+// The Quick Look extension: reads a Markdown file and returns the HTML page built by gomdgo, gomermaidgo
+// and gohighlightgo (the Go archive, functions from bridge.h). The system shows the HTML, so there is no view.
 final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
     func providePreview(for request: QLFilePreviewRequest) async throws -> QLPreviewReply {
         let url = request.fileURL

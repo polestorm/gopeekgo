@@ -1,33 +1,34 @@
-# 0002 Układ repozytorium, README i CI na wzór bibliotek rodziny
+# 0002 Repository layout, README and CI following the family libraries
 
-Status: przyjęta · 2026-11-25 (polecenie właściciela: README i układ jak w publicznych `gomdgo`,
-`gomermaidgo`, `gopdfgo`)
+Status: accepted · 2026-11-25 (owner's request: README and layout as in the public gomdgo, gomermaidgo and
+gopdfgo)
 
-## Kontekst
+## Context
 
-Publiczne repozytoria rodziny mają wspólny schemat. W korzeniu są tylko `LICENSE`, `NOTICE`, `README.md`,
-`go.mod` (i `go.sum`, gdy są zależności) oraz `.gitignore`; reszta leży w katalogach. Każde ma
-`.github/workflows/test.yml`. README po angielsku ma stały porządek: kilka zdań o tym, co projekt robi, krótki
-przykład, „Why …” z wypunktowanymi przewagami i akapitem o słabościach, spis treści, tabela porównania
-z jednym–trzema konkurentami (🥇 przy najlepszej wartości, przypisy ze sposobem pomiaru i datą), „Status”,
-„Documentation”, „How the comparison was measured”, „License”.
+The public repositories of the family share a pattern. The root holds only `LICENSE`, `NOTICE`, `README.md`,
+`go.mod` (and `go.sum` when there are dependencies) and `.gitignore`; everything else is in directories. Each has
+`.github/workflows/test.yml`. The English README has a fixed order: a few sentences on what the project does, a
+short example, "Why …" with the advantages as bullets and a paragraph on weaknesses, contents, a comparison table
+with one to three competitors (🥇 at the best value, footnotes with the method and the date), "Status",
+"Documentation", "How the comparison was measured", "License".
 
-ADR 0001 odłożył CI, bo moduły rodziny były prywatne. `gomdgo` i `gomermaidgo` są dziś publiczne;
-2026-11-25 sprawdzono, że `go mod download` przez `proxy.golang.org` i `sum.golang.org` daje sumy zgodne
-z `go.sum`, a `go vet ./...` i `go test ./...` przechodzą bez dostępu prywatnego.
+ADR 0001 put CI off because the family modules were private. gomdgo and gomermaidgo are public now; on 2026-11-25
+`go mod download` through `proxy.golang.org` and `sum.golang.org` gave checksums equal to `go.sum`, and
+`go vet ./...` and `go test ./...` passed without private access.
 
-## Decyzja
+## Decision
 
-1. `build.sh` przenosimy do `macos/build.sh` (buduje część macOS; skrypt przechodzi do korzenia repozytorium,
-   więc katalog `build/` zostaje tam, gdzie był).
-2. README według schematu rodziny, z jednym konkurentem (QLMarkdown). Ponieważ zasada projektu każe podawać
-   przewagę w procentach, tabela ma dodatkową kolumnę „gopeekgo advantage” przy wierszach liczbowych. Wiersze
-   o funkcjach pochodzą z próby na jednym pliku obiema programami (`docs/testing.md`), nie z dokumentacji.
-3. CI jak w bibliotekach: Go 1.22 i najnowsze, Linux i macOS; `gofmt`, `go vet`, `go test`, a na macOS także
-   zbudowanie aplikacji (`macos/build.sh` bez instalacji).
+1. `build.sh` moves to `macos/build.sh` (it builds the macOS part; the script changes to the root of the
+   repository, so the `build/` directory stays where it was).
+2. README following the family pattern, with one competitor (QLMarkdown). Because the project's rule asks for the
+   advantage in percent, the table has an extra column, "gopeekgo advantage", on the numeric rows.
+3. CI as in the libraries: Go 1.22 and the latest, Linux and macOS; `gofmt`, `go vet`, `go test`, and on macOS
+   building the application (`macos/build.sh` without installing).
 
-## Skutki
+## Consequences
 
-- Punkt ADR 0001 o braku CI jest nieaktualny.
-- Polecenia w dokumentacji brzmią `macos/build.sh install` zamiast `./build.sh install`.
-- Porównanie z innymi podglądami (`docs/roadmap.md`, punkt 5) dopisuje kolejne kolumny tej samej tabeli.
+- The point of ADR 0001 about no CI no longer applies. (The workflow was disabled on GitHub on 2026-11-25 until
+  the next billing period; `docs/roadmap.md`, item 8.)
+- The commands in the documentation read `macos/build.sh install` instead of `./build.sh install`.
+- A comparison with other previews (`docs/roadmap.md`, item 5) adds columns to the same table.
+- Later changes to the README layout: ADR 0004.

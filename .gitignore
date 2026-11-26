@@ -1,6 +1,6 @@
 .DS_Store
 /.claude/*
 !/.claude/CLAUDE.md
-# zbudowana aplikacja i wyniki robocze nie trafiają do repozytorium
+# the built application and working output stay out of the repository
 /build/
 /out/

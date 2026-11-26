@@ -58,8 +58,8 @@ func Page(src []byte, title string) (out []byte) {
 	return append(out, "</body>\n</html>\n"...)
 }
 
-// diagram rysuje jeden blok mermaid. Błąd nie przerywa podglądu: w miejscu diagramu zostaje
-// komunikat z numerem wiersza i źródło bloku.
+// diagram draws one mermaid block. An error does not stop the preview: the message with the line number
+// and the source of the block take the place of the diagram.
 func diagram(b gomdgo.CodeBlock) (out []byte, err error) {
 	defer func() {
 		if r := recover(); r != nil {
