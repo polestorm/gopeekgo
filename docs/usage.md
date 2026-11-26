@@ -49,6 +49,8 @@ go install -tags nohighlight github.com/polestorm/gopeekgo/cmd/gopeekgo-render@l
   number and the source of the block.
 - Code blocks in any of the 298 languages of gohighlightgo, coloured with its `auto` theme; a block in an
   unknown language stays plain text.
+- Text in a centred column of 860 pixels; tables, code blocks and diagrams wider than that grow evenly up to
+  the width of the window, so widening the Quick Look window gives them room.
 - Light and dark appearance, following the system.
 - Raw HTML from the document is shown as text, and `javascript:` links are removed. The page has no scripts;
   its stylesheet and diagrams are inline.

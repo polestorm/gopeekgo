@@ -2,7 +2,7 @@
 @media (prefers-color-scheme:dark){:root{--fg:#f0f6fc;--bg:#0d1117;--muted:#9198a1;--line:#3d444d;--soft:#151b23;--link:#4493f8}}
 html{background:var(--bg)}
 body{margin:0;color:var(--fg);background:var(--bg);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;-webkit-text-size-adjust:100%}
-main{max-width:860px;margin:0 auto;padding:28px 32px 8px;overflow-wrap:break-word}
+main{margin:0 auto;padding:28px 32px 8px;overflow-wrap:break-word}
 main>:first-child{margin-top:0}
 h1,h2,h3,h4,h5,h6{margin:1.5em 0 .6em;line-height:1.25;font-weight:600}
 h1{font-size:2em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
@@ -42,3 +42,8 @@ section.footnotes{margin-top:2em;padding-top:1em;font-size:.85em;color:var(--mut
 figure.diagram{padding:12px;border-radius:6px;background:#fff}
 pre.diagram-error{background:none}
 footer{max-width:860px;margin:0 auto;padding:8px 32px 20px;font-size:11px;color:var(--muted)}
+/* Mixed layout: text stays in a centred column of 860px, as long lines are hard to read; tables, code blocks and
+   diagrams are at least as wide as that column and, when their content is wider, grow evenly up to the width of
+   the window instead of scrolling inside the column. */
+main>*{max-width:860px;margin-left:auto;margin-right:auto}
+main>table,main>pre,main>figure{box-sizing:border-box;width:max-content;min-width:min(860px,100%);max-width:100%;overflow:auto}
